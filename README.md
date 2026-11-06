@@ -13,9 +13,10 @@
 ---
 
 ## 🔗 Quick Links
-- **Live Demo:** [https://groupfund-ai.vercel.app](https://groupfund-ai.vercel.app) *(or your deployed Vercel URL)*
+- **Live Demo:** [https://groupfund-ai.onrender.com/](https://groupfund-ai.onrender.com/)
 - **Demo Video (YouTube):** [https://youtu.be/your-demo-video-id](https://youtu.be/your-demo-video-id) *(Paste your YouTube link here)*
 - **Interactive Pitch Deck:** Available in-app at [`/slides`](http://localhost:3000/slides)
+- **Render Deployment Guide:** See [`RENDER_DEPLOYMENT.md`](RENDER_DEPLOYMENT.md)
 - **Devpost Submission Guide:** See [`DEVPOST_SUBMISSION.md`](DEVPOST_SUBMISSION.md)
 
 ---
@@ -137,6 +138,16 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 Full PostgreSQL DDL and seed scripts are included in `supabase/`:
 - `supabase/schema.sql`: 16 tables, constraints, indexes, and Row Level Security (RLS) policies.
 - `supabase/seed.sql`: Preloaded users (Daksh, Rahul, Jay, Sneha, Admin), Goa Trip expenses, and student projects.
+
+---
+
+## ☁️ Deployment on Render
+
+GroupFund AI is deployed on **Render** at [https://groupfund-ai.onrender.com/](https://groupfund-ai.onrender.com/).
+
+The application is deployed as a **Node.js Web Service** (rather than a static site) because it utilizes Next.js 16 server-side API routes (`/api/paypal/*`, `/api/ai/*`), dynamic SSR, and server-side cryptographic PayPal order creation and capture.
+
+For step-by-step instructions on setting up environment variables and deploying on Render, refer to [`RENDER_DEPLOYMENT.md`](RENDER_DEPLOYMENT.md).
 
 ---
 

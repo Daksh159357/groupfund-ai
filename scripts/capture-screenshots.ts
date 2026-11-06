@@ -37,9 +37,12 @@ async function captureScreenshots() {
     await page.goto('http://localhost:3000/groups/group-goa');
     await page.waitForTimeout(2000);
     await page.screenshot({
+      path: path.join(screenshotsDir, 'trip-expenses.png'),
+    });
+    await page.screenshot({
       path: path.join(screenshotsDir, 'goa-expenses.png'),
     });
-    console.log('✅ Saved public/screenshots/goa-expenses.png');
+    console.log('✅ Saved public/screenshots/trip-expenses.png and goa-expenses.png');
 
     // 3. AgriBot Innovation Project Page
     console.log('📸 3. Capturing AgriBot Project Page...');

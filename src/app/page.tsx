@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   Sparkles,
   ArrowRight,
@@ -17,12 +18,25 @@ import {
   Layers,
   HeartHandshake,
   ExternalLink,
+  Users,
+  Wallet,
+  Play,
 } from 'lucide-react';
 import { formatPaise } from '@/lib/financial';
 import { INITIAL_PROJECTS } from '@/lib/store';
 
 export default function LandingPage() {
-  const [openFaq, setOpenFaq] = React.useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // 3D Scroll Tracking for Hero Dashboard Preview
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const rotateX = useTransform(scrollYProgress, [0, 1], [0, 20]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
 
   const faqs = [
     {
@@ -68,6 +82,7 @@ export default function LandingPage() {
             <a href="#projects" className="hover:text-blue-400 transition-colors">Innovation Funding</a>
             <a href="#ai" className="hover:text-blue-400 transition-colors">AI Features</a>
             <a href="#faq" className="hover:text-blue-400 transition-colors">FAQ</a>
+            <Link href="/slides" className="text-purple-400 hover:text-purple-300 transition-colors">Pitch Deck</Link>
             <Link href="/discover" className="hover:text-blue-400 transition-colors">Discover Projects</Link>
           </nav>
 
@@ -88,8 +103,8 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 1. Hero Section */}
-      <section className="relative pt-16 sm:pt-24 pb-20 px-4 sm:px-8 overflow-hidden">
+      {/* 1. Hero Section with 3D Tilt Effect */}
+      <section ref={heroRef} className="relative pt-16 sm:pt-24 pb-20 px-4 sm:px-8 overflow-hidden">
         {/* Glow ambient gradients */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-blue-600/15 via-indigo-600/15 to-violet-600/10 blur-[130px] pointer-events-none" />
 
@@ -128,8 +143,60 @@ export default function LandingPage() {
             </Link>
           </div>
 
+          {/* 3D Dashboard Mockup Preview with Perspective */}
+          <div style={{ perspective: '1000px' }} className="pt-10 max-w-4xl mx-auto">
+            <motion.div
+              style={{ rotateX, scale }}
+              className="rounded-3xl border border-slate-800/80 bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-slate-950 p-4 sm:p-6 shadow-2xl shadow-blue-500/10 backdrop-blur-xl text-left"
+            >
+              {/* Fake Browser / App Chrome */}
+              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                  <span className="text-xs text-slate-500 ml-2 font-mono">groupfund-ai.onrender.com/dashboard</span>
+                </div>
+                <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Live Platform
+                </div>
+              </div>
+
+              {/* Mock Dashboard Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-slate-400">Total Group Balance</span>
+                    <Wallet className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <p className="text-xl font-bold text-white">+₹10,000</p>
+                  <p className="text-[10px] text-emerald-400">Receivable across all active trips</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-slate-400">Active Trip Group</span>
+                    <Users className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <p className="text-base font-bold text-white truncate">College Trip Goa 2026</p>
+                  <p className="text-[10px] text-blue-400">4 Members &bull; Min-Cash-Flow Plan Active</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-slate-400">Featured Innovation</span>
+                    <Sparkles className="w-4 h-4 text-purple-400" />
+                  </div>
+                  <p className="text-base font-bold text-white truncate">AgriBot Prototype</p>
+                  <p className="text-[10px] text-purple-400">PayPal Sandbox Enabled &bull; 33% Funded</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
           {/* Dual Pill Stats */}
-          <div className="pt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
             <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md text-left">
               <p className="text-[11px] text-slate-400 font-medium">Split Accuracy</p>
               <p className="text-xl font-bold text-white mt-0.5">1-Paise Exact</p>
@@ -154,8 +221,15 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2. How Group Expenses Work */}
-      <section id="expenses" className="py-20 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/30">
+      {/* 2. How Group Expenses Work with Scroll Reveal & 3D Feature Card Effect */}
+      <motion.section
+        id="expenses"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="py-20 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/30"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="text-center space-y-3 mb-14">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
@@ -170,7 +244,11 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4">
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4 cursor-pointer"
+            >
               <div className="w-12 h-12 rounded-2xl bg-blue-600/20 text-blue-400 flex items-center justify-center">
                 <Receipt className="w-6 h-6" />
               </div>
@@ -178,9 +256,13 @@ export default function LandingPage() {
               <p className="text-xs text-slate-400 leading-relaxed">
                 Snap any food, travel, or hardware receipt. Gemini automatically extracts merchant name, date, items, tax, and total for your approval before saving.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4">
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4 cursor-pointer"
+            >
               <div className="w-12 h-12 rounded-2xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
                 <Split className="w-6 h-6" />
               </div>
@@ -188,9 +270,13 @@ export default function LandingPage() {
               <p className="text-xs text-slate-400 leading-relaxed">
                 Split equally, by exact percentages, or custom amounts. Integer paise math guarantees the sum of member shares equals the receipt to the penny.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4">
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4 cursor-pointer"
+            >
               <div className="w-12 h-12 rounded-2xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center">
                 <TrendingUp className="w-6 h-6" />
               </div>
@@ -198,13 +284,20 @@ export default function LandingPage() {
               <p className="text-xs text-slate-400 leading-relaxed">
                 Our mathematically optimal settlement calculator slashes tangled group debts into the fewest transactions, with one-click payment recordings.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* 3. Discover Innovation Projects */}
-      <section id="projects" className="py-20 px-4 sm:px-8 border-t border-slate-800/80">
+      {/* 3. Discover Innovation Projects with Scroll Reveal */}
+      <motion.section
+        id="projects"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="py-20 px-4 sm:px-8 border-t border-slate-800/80"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <div>
@@ -281,10 +374,17 @@ export default function LandingPage() {
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* 4. AI-Powered Features (Gemini) */}
-      <section id="ai" className="py-20 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/40">
+      {/* 4. AI-Powered Features (Gemini) with 3D Feature Cards */}
+      <motion.section
+        id="ai"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="py-20 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/40"
+      >
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="text-center space-y-3">
             <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
@@ -299,43 +399,65 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3">
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+            >
               <Bot className="w-6 h-6 text-blue-400" />
               <h3 className="font-bold text-sm text-white">Unified Assistant</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Ask &ldquo;Who owes me money?&rdquo;, &ldquo;How much did I spend?&rdquo;, or &ldquo;Help me write a robotics proposal&rdquo; anytime.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3">
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+            >
               <Receipt className="w-6 h-6 text-indigo-400" />
               <h3 className="font-bold text-sm text-white">Multimodal Receipt OCR</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Extracts taxes, discounts, and item breakdowns from paper invoices with high confidence scores.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3">
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+            >
               <Lightbulb className="w-6 h-6 text-amber-400" />
               <h3 className="font-bold text-sm text-white">Proposal & Budget Drafter</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Converts rough engineering concepts into polished problem statements, BOM budgets, and milestone schedules.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3">
+            <motion.div
+              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+            >
               <Cpu className="w-6 h-6 text-emerald-400" />
               <h3 className="font-bold text-sm text-white">Milestone Verification</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Analyzes submitted benchmark test reports and hardware evidence to output transparent risk ratings.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 5. How Funding Works with PayPal */}
-      <section className="py-20 px-4 sm:px-8 border-t border-slate-800/80">
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="py-20 px-4 sm:px-8 border-t border-slate-800/80"
+      >
         <div className="max-w-4xl mx-auto rounded-3xl border border-blue-500/30 bg-gradient-to-b from-blue-950/20 to-slate-900 p-8 sm:p-12 text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-blue-400">
             <ShieldCheck className="w-4 h-4" />
@@ -368,10 +490,17 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 6. Frequently Asked Questions */}
-      <section id="faq" className="py-20 px-4 sm:px-8 border-t border-slate-800/80">
+      <motion.section
+        id="faq"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="py-20 px-4 sm:px-8 border-t border-slate-800/80"
+      >
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="text-center space-y-2">
             <h2 className="text-3xl font-bold text-white">Frequently Asked Questions</h2>
@@ -404,7 +533,7 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 7. Footer */}
       <footer className="border-t border-slate-800 bg-slate-950 py-12 px-4 sm:px-8">
@@ -422,6 +551,7 @@ export default function LandingPage() {
             <Link href="/discover" className="hover:text-slate-300 transition-colors">Discover</Link>
             <Link href="/expenses" className="hover:text-slate-300 transition-colors">Expenses</Link>
             <Link href="/ai-assistant" className="hover:text-slate-300 transition-colors">AI Assistant</Link>
+            <Link href="/slides" className="hover:text-slate-300 transition-colors">Slides</Link>
           </div>
 
           <div>

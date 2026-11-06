@@ -85,8 +85,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (savedTheme) {
       setTheme(savedTheme);
       if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
         document.documentElement.classList.add('light-theme');
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light-theme');
       }
+    } else {
+      document.documentElement.classList.add('dark');
     }
 
     return () => unsubscribe();
@@ -97,8 +103,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setTheme(nextTheme);
     localStorage.setItem('gf_theme', nextTheme);
     if (nextTheme === 'light') {
+      document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light-theme');
     } else {
+      document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light-theme');
     }
   };
