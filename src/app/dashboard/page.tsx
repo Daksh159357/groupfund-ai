@@ -110,17 +110,17 @@ export default function DashboardPage() {
     <AppLayout>
       <div className="space-y-8">
         {/* Top Welcome Banner */}
-        <div className="relative rounded-3xl border border-slate-800 bg-gradient-to-r from-blue-950/40 via-slate-900 to-indigo-950/30 p-6 sm:p-8 overflow-hidden">
+        <div className="relative rounded-3xl border border-blue-200/80 dark:border-slate-800 bg-gradient-to-r from-blue-50 via-indigo-50/50 to-slate-50 dark:from-blue-950/40 dark:via-slate-900 dark:to-indigo-950/30 p-6 sm:p-8 overflow-hidden shadow-sm">
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold">
+              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-blue-500/15 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 text-xs font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Unified Financial Intelligence</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
                 Welcome back, {currentUser.fullName}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
                 You are participating in {groups.length} groups and leading {myProjects.length} innovation prototype initiatives.
               </p>
             </div>
@@ -136,9 +136,9 @@ export default function DashboardPage() {
 
               <Link
                 href="/projects/create"
-                className="px-4 py-2.5 rounded-xl border border-violet-500/40 bg-violet-950/40 hover:bg-violet-900/50 text-violet-300 font-semibold text-xs flex items-center gap-2 transition-all active:scale-[0.98]"
+                className="px-4 py-2.5 rounded-xl border border-violet-300 dark:border-violet-500/40 bg-violet-50 dark:bg-violet-950/40 hover:bg-violet-100 dark:hover:bg-violet-900/50 text-violet-700 dark:text-violet-300 font-semibold text-xs flex items-center gap-2 transition-all active:scale-[0.98]"
               >
-                <Lightbulb className="w-4 h-4 text-violet-400" />
+                <Lightbulb className="w-4 h-4 text-violet-600 dark:text-violet-400" />
                 <span>+ Fund Project</span>
               </Link>
             </div>
@@ -148,76 +148,76 @@ export default function DashboardPage() {
         {/* 4 Unified Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Net Group Balance */}
-          <div id="tour-group-balance" className="p-5 rounded-2xl border border-slate-800 bg-slate-900/70 relative">
+          <div id="tour-group-balance" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 relative shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Net Group Balance</span>
+              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Net Group Balance</span>
               <div
                 className={`p-2 rounded-xl ${
                   balanceSummary.netPaise >= 0
-                    ? 'bg-emerald-500/10 text-emerald-400'
-                    : 'bg-amber-500/10 text-amber-400'
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                    : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
                 }`}
               >
                 <Scale className="w-4 h-4" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white mt-3 font-mono">
+            <p className="text-2xl font-bold text-slate-900 dark:text-white mt-3 font-mono">
               {balanceSummary.netPaise > 0 ? '+' : ''}
               {formatPaise(balanceSummary.netPaise)}
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               {balanceSummary.netPaise >= 0 ? (
-                <span className="text-emerald-400 font-medium">You are owed by friends</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-medium">You are owed by friends</span>
               ) : (
-                <span className="text-amber-400 font-medium">You have pending payables</span>
+                <span className="text-amber-600 dark:text-amber-400 font-medium">You have pending payables</span>
               )}
             </p>
           </div>
 
           {/* Card 2: Total Spent Out of Pocket */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/70 relative">
+          <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 relative shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Total Group Outlay</span>
-              <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400">
+              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Total Group Outlay</span>
+              <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
                 <Receipt className="w-4 h-4" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white mt-3 font-mono">
+            <p className="text-2xl font-bold text-slate-900 dark:text-white mt-3 font-mono">
               {formatPaise(balanceSummary.totalPaidPaise)}
             </p>
-            <p className="text-xs text-slate-400 mt-1">
-              Your personal share: <span className="text-slate-200">{formatPaise(balanceSummary.totalSharePaise)}</span>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Your personal share: <span className="text-slate-700 dark:text-slate-200 font-medium">{formatPaise(balanceSummary.totalSharePaise)}</span>
             </p>
           </div>
 
           {/* Card 3: Active Groups */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/70 relative">
+          <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 relative shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Active Groups</span>
-              <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
+              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Active Groups</span>
+              <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
                 <Users className="w-4 h-4" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white mt-3">{groups.length}</p>
-            <p className="text-xs text-slate-400 mt-1">
-              <Link href="/groups" className="text-blue-400 hover:underline">
+            <p className="text-2xl font-bold text-slate-900 dark:text-white mt-3">{groups.length}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <Link href="/groups" className="text-blue-600 dark:text-blue-400 hover:underline">
                 View all groups &rarr;
               </Link>
             </p>
           </div>
 
           {/* Card 4: Total Crowdfunding Raised */}
-          <div id="tour-total-raised" className="p-5 rounded-2xl border border-slate-800 bg-slate-900/70 relative">
+          <div id="tour-total-raised" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/70 relative shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Innovation Funding</span>
-              <div className="p-2 rounded-xl bg-violet-500/10 text-violet-400">
+              <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Innovation Funding</span>
+              <div className="p-2 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400">
                 <TrendingUp className="w-4 h-4" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-white mt-3 font-mono">
+            <p className="text-2xl font-bold text-slate-900 dark:text-white mt-3 font-mono">
               {formatPaise(totalRaisedAcrossProjects)}
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Across {projects.length} verified projects
             </p>
           </div>
@@ -228,41 +228,41 @@ export default function DashboardPage() {
           {/* Left Column: Recent Group Expenses & Chart (2/3) */}
           <div className="lg:col-span-2 space-y-6">
             {/* Recent Expenses Container */}
-            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/60 space-y-4">
+            <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-white">Recent Group Expenses</h3>
-                  <p className="text-xs text-slate-400">Latest shared transactions across your circles</p>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Recent Group Expenses</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Latest shared transactions across your circles</p>
                 </div>
                 <Link
                   href="/expenses"
-                  className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1"
+                  className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-500 font-semibold flex items-center gap-1"
                 >
                   <span>All expenses</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
-              <div className="divide-y divide-slate-800/80">
+              <div className="divide-y divide-slate-100 dark:divide-slate-800/80">
                 {expenses.slice(0, 5).map((exp) => (
                   <div key={exp.id} className="py-3.5 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center shrink-0 text-slate-300 text-xs font-bold">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 text-slate-700 dark:text-slate-300 text-xs font-bold">
                         {exp.category[0]}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold text-white truncate">{exp.title}</p>
-                        <p className="text-[11px] text-slate-400 truncate">
-                          {exp.groupName} &bull; Paid by <span className="text-slate-300">{exp.paidByUserName}</span>
+                        <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">{exp.title}</p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                          {exp.groupName} &bull; Paid by <span className="text-slate-700 dark:text-slate-300 font-medium">{exp.paidByUserName}</span>
                         </p>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0">
-                      <p className="font-mono text-xs font-bold text-white">
+                      <p className="font-mono text-xs font-bold text-slate-900 dark:text-white">
                         {formatPaise(exp.amountPaise)}
                       </p>
-                      <span className="text-[10px] text-slate-400 capitalize">{exp.splitType} split</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 capitalize">{exp.splitType} split</span>
                     </div>
                   </div>
                 ))}
@@ -270,10 +270,10 @@ export default function DashboardPage() {
             </div>
 
             {/* Expenditure Chart */}
-            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/60 space-y-4">
+            <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 space-y-4 shadow-sm">
               <div>
-                <h3 className="text-base font-bold text-white">Expenditure by Category</h3>
-                <p className="text-xs text-slate-400">Breakdown of total shared group spending</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Expenditure by Category</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Breakdown of total shared group spending</p>
               </div>
 
               <div className="h-64 w-full">
@@ -283,7 +283,7 @@ export default function DashboardPage() {
                     <YAxis stroke="#64748b" fontSize={11} tickFormatter={(val) => `₹${val}`} />
                     <Tooltip
                       formatter={(val: any) => [`₹${val}`, 'Spent']}
-                      contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                      contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px', color: '#f8fafc' }}
                     />
                     <Bar dataKey="amount" fill="#3b82f6" radius={[6, 6, 0, 0]} />
                   </BarChart>
@@ -295,13 +295,13 @@ export default function DashboardPage() {
           {/* Right Column: Innovation Projects Spotlight & Settlements (1/3) */}
           <div className="space-y-6">
             {/* Innovation Showcase */}
-            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/60 space-y-4">
+            <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-white">Innovation Projects</h3>
-                  <p className="text-xs text-slate-400">Student prototypes seeking backing</p>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Innovation Projects</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Student prototypes seeking backing</p>
                 </div>
-                <Link href="/discover" className="text-xs text-blue-400 hover:text-blue-300 font-semibold">
+                <Link href="/discover" className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-500 font-semibold">
                   Discover
                 </Link>
               </div>
@@ -312,7 +312,7 @@ export default function DashboardPage() {
                   return (
                     <div
                       key={proj.id}
-                      className="p-4 rounded-2xl border border-slate-800 bg-slate-950/50 space-y-3"
+                      className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 space-y-3"
                     >
                       <div className="flex items-center gap-3">
                         <img
@@ -321,17 +321,17 @@ export default function DashboardPage() {
                           className="w-12 h-12 rounded-xl object-cover shrink-0"
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="text-xs font-bold text-white truncate">{proj.title}</p>
-                          <p className="text-[10px] text-blue-400">{proj.institution}</p>
+                          <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{proj.title}</p>
+                          <p className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">{proj.institution}</p>
                         </div>
                       </div>
 
                       <div className="space-y-1">
                         <div className="flex justify-between text-[11px]">
-                          <span className="font-semibold text-white">{formatPaise(proj.raisedAmountPaise)}</span>
-                          <span className="text-slate-400">{progress}%</span>
+                          <span className="font-semibold text-slate-900 dark:text-white">{formatPaise(proj.raisedAmountPaise)}</span>
+                          <span className="text-slate-500 dark:text-slate-400">{progress}%</span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                        <div className="w-full h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                           <div
                             className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
                             style={{ width: `${progress}%` }}
@@ -341,7 +341,7 @@ export default function DashboardPage() {
 
                       <Link
                         href={`/projects/${proj.id}`}
-                        className="w-full py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
+                        className="w-full py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                       >
                         <span>Contribute</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
@@ -353,17 +353,17 @@ export default function DashboardPage() {
             </div>
 
             {/* AI Assistant Quick Card */}
-            <div className="p-6 rounded-3xl border border-blue-500/25 bg-gradient-to-b from-blue-950/30 to-slate-900/80 space-y-3">
-              <div className="flex items-center gap-2 text-blue-400">
+            <div className="p-6 rounded-3xl border border-blue-200 dark:border-blue-500/25 bg-gradient-to-b from-blue-50/80 to-white dark:from-blue-950/30 dark:to-slate-900/80 space-y-3 shadow-sm">
+              <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
                 <Sparkles className="w-5 h-5" />
-                <h4 className="font-bold text-sm text-white">Ask GroupFund AI</h4>
+                <h4 className="font-bold text-sm text-slate-900 dark:text-white">Ask GroupFund AI</h4>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 Got questions about who owes you money or need help drafting a grant proposal for your next robotics project?
               </p>
               <Link
                 href="/ai-assistant"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500"
               >
                 <span>Launch Assistant &rarr;</span>
               </Link>

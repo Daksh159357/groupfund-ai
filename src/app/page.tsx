@@ -1,8 +1,14 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+} from 'framer-motion';
 import {
   Sparkles,
   ArrowRight,
@@ -21,22 +27,134 @@ import {
   Users,
   Wallet,
   Play,
+  Coins,
+  ArrowUpRight,
+  Send,
+  MessageSquare,
+  Check,
+  Zap,
 } from 'lucide-react';
 import { formatPaise } from '@/lib/financial';
 import { INITIAL_PROJECTS } from '@/lib/store';
 
+// Typewriter text generator for realistic conversational AI demo
+function TypewriterText({ text, delay = 0, speed = 28 }: { text: string; delay?: number; speed?: number }) {
+  const [displayed, setDisplayed] = useState('');
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    const start = setTimeout(() => {
+      let i = 0;
+      interval = setInterval(() => {
+        if (i <= text.length) {
+          setDisplayed(text.slice(0, i));
+          i++;
+        } else {
+          clearInterval(interval);
+        }
+      }, speed);
+    }, delay);
+    return () => {
+      clearTimeout(start);
+      clearInterval(interval);
+    };
+  }, [text, delay, speed]);
+
+  return <span>{displayed}</span>;
+}
+
+// Counting number animation for split cards
+function CountUpNumber({ end, duration = 1.2 }: { end: number; duration?: number }) {
+  const [val, setVal] = useState(0);
+  const [started, setStarted] = useState(false);
+
+  return (
+    <motion.span
+      onViewportEnter={() => {
+        if (!started) {
+          setStarted(true);
+          let current = 0;
+          const steps = 35;
+          const increment = Math.ceil(end / steps);
+          const stepTime = Math.floor((duration * 1000) / steps);
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= end) {
+              setVal(end);
+              clearInterval(timer);
+            } else {
+              setVal(current);
+            }
+          }, stepTime);
+        }
+      }}
+      viewport={{ once: true }}
+    >
+      ₹{val.toLocaleString('en-IN')}
+    </motion.span>
+  );
+}
+
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const heroRef = useRef<HTMLDivElement>(null);
 
-  // 3D Scroll Tracking for Hero Dashboard Preview
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
+  // Mouse-Following Gradient Coordinates
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothMouseX = useSpring(mouseX, { stiffness: 60, damping: 20 });
+  const smoothMouseY = useSpring(mouseY, { stiffness: 60, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  // Sticky 300vh Container Scroll Tracking
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: stickyProgress } = useScroll({
+    target: stickyRef,
+    offset: ['start start', 'end end'],
   });
 
-  const rotateX = useTransform(scrollYProgress, [0, 1], [0, 20]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+  // Sticky Phase 1 (0.0 to 0.3): Scale from 0.85 to 1.0, rotateX 20deg to 0deg
+  const mockupScale = useTransform(stickyProgress, [0, 0.25], [0.85, 1.0]);
+  const mockupRotateX = useTransform(stickyProgress, [0, 0.25], [20, 0]);
+  const phase1Opacity = useTransform(stickyProgress, [0, 0.05, 0.22, 0.28], [0, 1, 1, 0]);
+
+  // Sticky Phase 2 (0.3 to 0.6): Dashboard slides left, AI chat slides from right
+  const mockupX = useTransform(stickyProgress, [0.3, 0.55], ['0%', '-26%']);
+  const aiChatX = useTransform(stickyProgress, [0.32, 0.48], ['120%', '0%']);
+  const aiChatOpacity = useTransform(stickyProgress, [0.32, 0.38, 0.58, 0.64], [0, 1, 1, 0]);
+  const phase2Opacity = useTransform(stickyProgress, [0.3, 0.35, 0.55, 0.6], [0, 1, 1, 0]);
+
+  // Sticky Phase 3 (0.6 to 1.0): Massive Logo glow in center
+  const logoScale = useTransform(stickyProgress, [0.65, 0.95], [0.75, 1.25]);
+  const logoOpacity = useTransform(stickyProgress, [0.65, 0.78, 1.0], [0, 1, 1]);
+  const phase3Opacity = useTransform(stickyProgress, [0.65, 0.75, 1.0], [0, 1, 1]);
+
+  // Scroll-Triggered Expense Splitting Section Tracking
+  const splitRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: splitProgress } = useScroll({
+    target: splitRef,
+    offset: ['start end', 'center center'],
+  });
+
+  const billY = useTransform(splitProgress, [0, 0.7], [20, -30]);
+  const billOpacity = useTransform(splitProgress, [0, 0.4, 0.85], [1, 1, 0.35]);
+  const membersY = useTransform(splitProgress, [0.25, 0.75], [50, 0]);
+  const membersOpacity = useTransform(splitProgress, [0.25, 0.6], [0, 1]);
+  const pathProgress = useTransform(splitProgress, [0.25, 0.75], [0, 1]);
+
+  // Footer Orb Expansion Tracking
+  const footerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: footerProgress } = useScroll({
+    target: footerRef,
+    offset: ['start end', 'end end'],
+  });
+  const orbScale = useTransform(footerProgress, [0, 1], [0.6, 2.0]);
+  const orbOpacity = useTransform(footerProgress, [0, 0.5, 1], [0.2, 0.65, 0.9]);
+
+  const heroWords = ['Money', 'Management', 'Meets', 'Innovation', 'Funding.'];
 
   const faqs = [
     {
@@ -62,7 +180,22 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white">
+    <div
+      onMouseMove={handleMouseMove}
+      className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white relative overflow-x-hidden"
+    >
+      {/* Dynamic Mouse-Following Radial Gradient */}
+      <motion.div
+        className="pointer-events-none fixed -inset-px z-30 opacity-40 transition-opacity duration-300 hidden md:block"
+        style={{
+          background: useTransform(
+            [smoothMouseX, smoothMouseY],
+            ([x, y]) =>
+              `radial-gradient(600px circle at ${x}px ${y}px, rgba(59, 130, 246, 0.15), transparent 80%)`
+          ),
+        }}
+      />
+
       {/* Top Navigation */}
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl px-4 sm:px-8 py-3.5">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -103,10 +236,43 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 1. Hero Section with 3D Tilt Effect */}
-      <section ref={heroRef} className="relative pt-16 sm:pt-24 pb-20 px-4 sm:px-8 overflow-hidden">
+      {/* 1. Cinematic Hero Entrance with Floating Elements & Text Reveal */}
+      <section className="relative pt-16 sm:pt-28 pb-20 px-4 sm:px-8 overflow-hidden">
         {/* Glow ambient gradients */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-blue-600/15 via-indigo-600/15 to-violet-600/10 blur-[130px] pointer-events-none" />
+
+        {/* Floating Background Icons & Currency Symbols */}
+        <motion.div
+          animate={{ y: [0, -22, 0] }}
+          transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
+          className="absolute top-24 left-[10%] hidden md:flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 backdrop-blur-md shadow-xl"
+        >
+          <span className="font-mono text-xl font-bold">₹</span>
+        </motion.div>
+
+        <motion.div
+          animate={{ y: [0, -28, 0] }}
+          transition={{ repeat: Infinity, duration: 4.2, ease: 'easeInOut', delay: 0.5 }}
+          className="absolute top-36 right-[12%] hidden md:flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 backdrop-blur-md shadow-xl"
+        >
+          <Receipt className="w-6 h-6" />
+        </motion.div>
+
+        <motion.div
+          animate={{ y: [0, -18, 0] }}
+          transition={{ repeat: Infinity, duration: 3.8, ease: 'easeInOut', delay: 1 }}
+          className="absolute bottom-20 left-[15%] hidden md:flex items-center justify-center w-11 h-11 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 backdrop-blur-md shadow-xl"
+        >
+          <Bot className="w-5 h-5" />
+        </motion.div>
+
+        <motion.div
+          animate={{ y: [0, -24, 0] }}
+          transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut', delay: 0.8 }}
+          className="absolute bottom-28 right-[16%] hidden md:flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 backdrop-blur-md shadow-xl"
+        >
+          <ShieldCheck className="w-6 h-6" />
+        </motion.div>
 
         <div className="max-w-5xl mx-auto text-center relative z-10 space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs font-semibold text-blue-400">
@@ -114,11 +280,23 @@ export default function LandingPage() {
             <span>AI-Powered Financial Collaboration Platform</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white">
-            Money Management Meets <br />
-            <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-violet-400 bg-clip-text text-transparent">
-              Innovation Funding.
-            </span>
+          {/* Staggered Word Reveal Heading */}
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white flex flex-wrap justify-center gap-x-3.5 gap-y-1">
+            {heroWords.map((word, index) => (
+              <motion.span
+                key={word}
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.55, ease: 'easeOut' }}
+                className={
+                  index >= 3
+                    ? 'bg-gradient-to-r from-blue-400 via-indigo-300 to-violet-400 bg-clip-text text-transparent'
+                    : ''
+                }
+              >
+                {word}
+              </motion.span>
+            ))}
           </h1>
 
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed">
@@ -143,60 +321,8 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* 3D Dashboard Mockup Preview with Perspective */}
-          <div style={{ perspective: '1000px' }} className="pt-10 max-w-4xl mx-auto">
-            <motion.div
-              style={{ rotateX, scale }}
-              className="rounded-3xl border border-slate-800/80 bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-slate-950 p-4 sm:p-6 shadow-2xl shadow-blue-500/10 backdrop-blur-xl text-left"
-            >
-              {/* Fake Browser / App Chrome */}
-              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                  <span className="text-xs text-slate-500 ml-2 font-mono">groupfund-ai.onrender.com/dashboard</span>
-                </div>
-                <div className="flex items-center gap-2 text-[11px] text-emerald-400 font-semibold">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Platform
-                </div>
-              </div>
-
-              {/* Mock Dashboard Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-slate-400">Total Group Balance</span>
-                    <Wallet className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <p className="text-xl font-bold text-white">+₹10,000</p>
-                  <p className="text-[10px] text-emerald-400">Receivable across all active trips</p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-slate-400">Active Trip Group</span>
-                    <Users className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <p className="text-base font-bold text-white truncate">College Trip Goa 2026</p>
-                  <p className="text-[10px] text-blue-400">4 Members &bull; Min-Cash-Flow Plan Active</p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-slate-400">Featured Innovation</span>
-                    <Sparkles className="w-4 h-4 text-purple-400" />
-                  </div>
-                  <p className="text-base font-bold text-white truncate">AgriBot Prototype</p>
-                  <p className="text-[10px] text-purple-400">PayPal Sandbox Enabled &bull; 33% Funded</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Dual Pill Stats */}
-          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+          {/* Quick Dual Pill Stats */}
+          <div className="pt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
             <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/50 backdrop-blur-md text-left">
               <p className="text-[11px] text-slate-400 font-medium">Split Accuracy</p>
               <p className="text-xl font-bold text-white mt-0.5">1-Paise Exact</p>
@@ -221,82 +347,400 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2. How Group Expenses Work with Scroll Reveal & 3D Feature Card Effect */}
-      <motion.section
-        id="expenses"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="py-20 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/30"
-      >
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center space-y-3 mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
-              Module A &bull; Group Expenses
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">
-              Effortless Shared Money with Friends & Teams
+      {/* 2. Apple-Style Sticky Scroll Container (300vh): "The Intelligence Behind Your Money" */}
+      <section ref={stickyRef} className="relative h-[300vh] bg-slate-950 border-t border-slate-800/80">
+        <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden px-4">
+          {/* Phase 1 Text Overlay */}
+          <motion.div
+            style={{ opacity: phase1Opacity }}
+            className="absolute top-16 text-center z-20 pointer-events-none"
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">Phase 1</span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-white mt-1">
+              Track Every Rupee with Total Clarity
             </h2>
-            <p className="text-sm text-slate-400 max-w-xl mx-auto">
-              From college trips in Goa to hostel groceries and robotics lab hardware components.
-            </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Phase 2 Text Overlay */}
+          <motion.div
+            style={{ opacity: phase2Opacity }}
+            className="absolute top-16 text-center z-20 pointer-events-none"
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">Phase 2</span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-white mt-1">
+              Let Gemini AI Do the Math & Proposal Drafting
+            </h2>
+          </motion.div>
+
+          {/* Phase 3 Text Overlay */}
+          <motion.div
+            style={{ opacity: phase3Opacity }}
+            className="absolute top-16 text-center z-20 pointer-events-none"
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Phase 3</span>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-white mt-1">
+              Fund the Future with PayPal Sandbox Checkout
+            </h2>
+          </motion.div>
+
+          {/* Center Visual Staging Area */}
+          <div className="relative w-full max-w-5xl h-[480px] sm:h-[520px] flex items-center justify-center">
+            {/* 3D Dashboard Mockup */}
             <motion.div
-              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4 cursor-pointer"
+              style={{
+                scale: mockupScale,
+                rotateX: mockupRotateX,
+                x: mockupX,
+                perspective: '1200px',
+              }}
+              className="w-full max-w-2xl rounded-3xl border border-slate-800 bg-slate-900/90 p-5 sm:p-6 shadow-2xl shadow-blue-500/10 backdrop-blur-xl z-10"
             >
-              <div className="w-12 h-12 rounded-2xl bg-blue-600/20 text-blue-400 flex items-center justify-center">
-                <Receipt className="w-6 h-6" />
+              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                  <span className="text-xs text-slate-500 ml-2 font-mono">groupfund-ai.onrender.com/dashboard</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[11px] text-emerald-400 font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  Active Ledger
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-white">1. AI Receipt Scanning</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Snap any food, travel, or hardware receipt. Gemini automatically extracts merchant name, date, items, tax, and total for your approval before saving.
-              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4">
+                <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400">Total Group Balance</span>
+                  <p className="text-lg font-bold text-white font-mono">+₹10,000</p>
+                  <p className="text-[9px] text-emerald-400">Receivable from Goa Trip</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400">Active Group</span>
+                  <p className="text-sm font-bold text-white truncate">Goa 2026 &bull; Robolab</p>
+                  <p className="text-[9px] text-blue-400">Min-Cash-Flow Active</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+                  <span className="text-[10px] text-slate-400">Innovation Prototype</span>
+                  <p className="text-sm font-bold text-white truncate">AgriBot Precision Rover</p>
+                  <p className="text-[9px] text-purple-400">PayPal Verified &bull; 70%</p>
+                </div>
+              </div>
+
+              <div className="mt-4 p-3 rounded-xl bg-slate-950/50 border border-slate-800/80 flex items-center justify-between text-xs">
+                <span className="text-slate-400">Live Status:</span>
+                <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  0 Floating Errors (Integer Paise Math)
+                </span>
+              </div>
             </motion.div>
 
+            {/* Glowing AI Chat Box Sliding in from Right in Phase 2 */}
             <motion.div
-              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4 cursor-pointer"
+              style={{
+                x: aiChatX,
+                opacity: aiChatOpacity,
+              }}
+              className="absolute right-0 w-80 sm:w-96 rounded-3xl border border-indigo-500/40 bg-slate-900/95 p-5 shadow-2xl shadow-indigo-500/20 backdrop-blur-2xl z-20 space-y-3"
             >
-              <div className="w-12 h-12 rounded-2xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
-                <Split className="w-6 h-6" />
+              <div className="flex items-center gap-2 text-indigo-400 pb-2 border-b border-slate-800">
+                <Bot className="w-5 h-5 animate-pulse" />
+                <span className="font-bold text-sm text-white">Gemini Financial Assistant</span>
               </div>
-              <h3 className="text-lg font-bold text-white">2. Flexible 3-Way Splits</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Split equally, by exact percentages, or custom amounts. Integer paise math guarantees the sum of member shares equals the receipt to the penny.
-              </p>
+              <div className="space-y-2 text-xs">
+                <div className="p-2.5 rounded-xl bg-slate-800/80 text-slate-300">
+                  &ldquo;Scan dinner bill of ₹3,000 for Candolim Villa and split 3 ways.&rdquo;
+                </div>
+                <div className="p-2.5 rounded-xl bg-indigo-950/40 border border-indigo-500/30 text-indigo-200">
+                  &ldquo;Done! Split ₹1,000 each to Daksh, Rahul, and Jay. Min-Cash-Flow plan updated with 1 transfer.&rdquo;
+                </div>
+              </div>
             </motion.div>
 
+            {/* Glowing GroupFund AI Emblem Revealed in Phase 3 */}
             <motion.div
-              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="p-6 rounded-3xl border border-slate-800 bg-slate-900/70 space-y-4 cursor-pointer"
+              style={{
+                scale: logoScale,
+                opacity: logoOpacity,
+              }}
+              className="absolute inset-0 flex flex-col items-center justify-center z-30 pointer-events-none"
             >
-              <div className="w-12 h-12 rounded-2xl bg-emerald-600/20 text-emerald-400 flex items-center justify-center">
-                <TrendingUp className="w-6 h-6" />
+              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-2xl shadow-blue-500/50 border border-white/20">
+                <Sparkles className="w-14 h-14 sm:w-16 sm:h-16" />
               </div>
-              <h3 className="text-lg font-bold text-white">3. Simplified Settlements</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Our mathematically optimal settlement calculator slashes tangled group debts into the fewest transactions, with one-click payment recordings.
+              <h3 className="text-3xl sm:text-5xl font-extrabold text-white mt-6 tracking-tight">
+                GroupFund <span className="text-blue-500">AI</span>
+              </h3>
+              <p className="text-sm text-slate-300 mt-2 font-medium">
+                The Single Platform for Campus Finance & Prototype Grants
               </p>
             </motion.div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      {/* 3. Discover Innovation Projects with Scroll Reveal */}
+      {/* 3. Scroll-Triggered Expense Splitting (The Core Visual) */}
+      <section ref={splitRef} className="py-28 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/40 relative overflow-hidden">
+        <div className="max-w-5xl mx-auto space-y-12 text-center">
+          <div className="space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
+              Interactive Mathematics
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+              Splitting bills has never been this beautiful.
+            </h2>
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
+              Watch an unorganized ₹3,000 restaurant bill split cleanly across members with zero friction.
+            </p>
+          </div>
+
+          <div className="relative pt-6 pb-12 flex flex-col items-center">
+            {/* Single Glowing Center Bill Card */}
+            <motion.div
+              style={{ y: billY, opacity: billOpacity }}
+              className="w-72 sm:w-80 rounded-3xl border border-blue-500/40 bg-gradient-to-b from-blue-950/40 via-slate-900 to-slate-900 p-5 shadow-2xl shadow-blue-500/20 text-left space-y-2 z-20"
+            >
+              <div className="flex items-center justify-between text-xs text-blue-400">
+                <span className="font-semibold">Candolim Shack Dinner</span>
+                <Receipt className="w-4 h-4" />
+              </div>
+              <div className="text-3xl font-extrabold text-white font-mono">
+                ₹3,000.00
+              </div>
+              <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800">
+                <span>Paid by Daksh</span>
+                <span className="text-emerald-400 font-medium">Receipt OCR Verified</span>
+              </div>
+            </motion.div>
+
+            {/* SVG Dynamic Connecting Lines */}
+            <div className="w-full max-w-md h-20 my-2 hidden md:block">
+              <svg className="w-full h-full overflow-visible" viewBox="0 0 400 80" fill="none">
+                {/* Center to Left */}
+                <motion.path
+                  d="M 200 0 C 200 40, 60 40, 60 80"
+                  stroke="#3b82f6"
+                  strokeWidth="2.5"
+                  strokeDasharray="4 4"
+                  style={{ pathLength: pathProgress }}
+                />
+                {/* Center Straight Down */}
+                <motion.path
+                  d="M 200 0 L 200 80"
+                  stroke="#6366f1"
+                  strokeWidth="2.5"
+                  strokeDasharray="4 4"
+                  style={{ pathLength: pathProgress }}
+                />
+                {/* Center to Right */}
+                <motion.path
+                  d="M 200 0 C 200 40, 340 40, 340 80"
+                  stroke="#8b5cf6"
+                  strokeWidth="2.5"
+                  strokeDasharray="4 4"
+                  style={{ pathLength: pathProgress }}
+                />
+              </svg>
+            </div>
+
+            {/* 3 Member Cards Fading & Counting In */}
+            <motion.div
+              style={{ y: membersY, opacity: membersOpacity }}
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl mt-4 z-10"
+            >
+              <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/90 shadow-xl text-left space-y-1">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold">
+                    D
+                  </div>
+                  <span className="text-xs font-semibold text-slate-200">Daksh Sharma</span>
+                </div>
+                <div className="text-xl font-bold text-emerald-400 font-mono mt-1">
+                  <CountUpNumber end={1000} />
+                </div>
+                <span className="text-[10px] text-slate-500 block">Personal Share</span>
+              </div>
+
+              <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/90 shadow-xl text-left space-y-1">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[10px] font-bold">
+                    R
+                  </div>
+                  <span className="text-xs font-semibold text-slate-200">Rahul Verma</span>
+                </div>
+                <div className="text-xl font-bold text-amber-400 font-mono mt-1">
+                  <CountUpNumber end={1000} />
+                </div>
+                <span className="text-[10px] text-slate-500 block">Owes Daksh</span>
+              </div>
+
+              <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/90 shadow-xl text-left space-y-1">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-white text-[10px] font-bold">
+                    J
+                  </div>
+                  <span className="text-xs font-semibold text-slate-200">Jay Patel</span>
+                </div>
+                <div className="text-xl font-bold text-amber-400 font-mono mt-1">
+                  <CountUpNumber end={1000} />
+                </div>
+                <span className="text-[10px] text-slate-500 block">Owes Daksh</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. AI Intelligence Animation: "Meet your AI Financial Copilot" */}
+      <section id="ai" className="py-24 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-950">
+        <div className="max-w-6xl mx-auto space-y-14">
+          <div className="text-center space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+              Intelligence Layer
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white">
+              Meet your AI Financial Copilot.
+            </h2>
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
+              Powered by Google Gemini 2.5 Flash for natural multimodal bill extraction and automated project proposals.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Left: Glowing Chat Interface with Typewriter Effect */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6 }}
+              className="rounded-3xl border border-indigo-500/30 bg-slate-900/90 p-5 sm:p-6 shadow-2xl shadow-indigo-500/15 backdrop-blur-xl space-y-4"
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <div className="relative">
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+                      <Bot className="w-4 h-4" />
+                    </div>
+                    <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-slate-900 animate-pulse" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white">Gemini 2.5 Assistant</p>
+                    <p className="text-[10px] text-slate-400">Multimodal OCR & Debt Planner</p>
+                  </div>
+                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 font-mono">
+                  Online
+                </span>
+              </div>
+
+              {/* Chat Thread */}
+              <div className="space-y-3 py-2">
+                {/* User Bubble */}
+                <div className="flex justify-end">
+                  <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-blue-600 px-4 py-2.5 text-xs text-white shadow-md">
+                    <TypewriterText text="Scan this receipt and split it between 5 people." delay={300} speed={25} />
+                  </div>
+                </div>
+
+                {/* Gemini AI Bubble */}
+                <div className="flex justify-start items-start gap-2 pt-1">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-600/30 text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-indigo-500/30 bg-indigo-950/40 px-4 py-2.5 text-xs text-indigo-100 shadow-md space-y-1.5">
+                    <p className="font-semibold text-indigo-300">
+                      <TypewriterText
+                        text="Done! Extracted 4 items totaling ₹2,500. Everyone owes exactly ₹500."
+                        delay={1600}
+                        speed={25}
+                      />
+                    </p>
+                    <div className="text-[10px] text-indigo-300/80 pt-1 border-t border-indigo-500/20 flex items-center gap-1">
+                      <Check className="w-3 h-3 text-emerald-400" />
+                      <span>Zero remainder rounding errors. Added to College Trip ledger.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Fake Input Box */}
+              <div className="pt-2">
+                <div className="flex items-center gap-2 p-2 rounded-2xl bg-slate-950 border border-slate-800">
+                  <input
+                    type="text"
+                    disabled
+                    placeholder="Ask Gemini to analyze debts or draft proposal..."
+                    className="w-full bg-transparent text-xs text-slate-400 px-2 outline-none"
+                  />
+                  <button className="p-2 rounded-xl bg-blue-600 text-white shrink-0">
+                    <Send className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right: AI Capability Pillars */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <motion.div
+                whileHover={{ scale: 1.04, rotateY: 4 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+              >
+                <Bot className="w-6 h-6 text-blue-400" />
+                <h3 className="font-bold text-sm text-white">Unified Assistant</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Ask &ldquo;Who owes me money?&rdquo; or &ldquo;How much did I spend in Goa?&rdquo; anytime.
+                </p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.04, rotateY: 4 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+              >
+                <Receipt className="w-6 h-6 text-indigo-400" />
+                <h3 className="font-bold text-sm text-white">Multimodal Receipt OCR</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Accepts camera photos of invoices and extracts line items, subtotal, and taxes.
+                </p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.04, rotateY: 4 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+              >
+                <Lightbulb className="w-6 h-6 text-amber-400" />
+                <h3 className="font-bold text-sm text-white">Proposal Drafter</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Converts rough robotics hardware concepts into BOM budgets and milestone schedules.
+                </p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.04, rotateY: 4 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
+              >
+                <Cpu className="w-6 h-6 text-emerald-400" />
+                <h3 className="font-bold text-sm text-white">Milestone Verification</h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Audits sensor logs, test documents, and photos to score milestone completion.
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Discover Innovation Projects */}
       <motion.section
         id="projects"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6 }}
-        className="py-20 px-4 sm:px-8 border-t border-slate-800/80"
+        className="py-20 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/30"
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
@@ -376,85 +820,11 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
-      {/* 4. AI-Powered Features (Gemini) with 3D Feature Cards */}
-      <motion.section
-        id="ai"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="py-20 px-4 sm:px-8 border-t border-slate-800/80 bg-slate-900/40"
-      >
-        <div className="max-w-6xl mx-auto space-y-12">
-          <div className="text-center space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
-              Intelligence Layer
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white">
-              Powered by Google Gemini 2.5 Flash
-            </h2>
-            <p className="text-sm text-slate-400 max-w-xl mx-auto">
-              Smart tools built directly into your workflow to save time, prevent debt disputes, and accelerate grants.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <motion.div
-              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
-            >
-              <Bot className="w-6 h-6 text-blue-400" />
-              <h3 className="font-bold text-sm text-white">Unified Assistant</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Ask &ldquo;Who owes me money?&rdquo;, &ldquo;How much did I spend?&rdquo;, or &ldquo;Help me write a robotics proposal&rdquo; anytime.
-              </p>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
-            >
-              <Receipt className="w-6 h-6 text-indigo-400" />
-              <h3 className="font-bold text-sm text-white">Multimodal Receipt OCR</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Extracts taxes, discounts, and item breakdowns from paper invoices with high confidence scores.
-              </p>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
-            >
-              <Lightbulb className="w-6 h-6 text-amber-400" />
-              <h3 className="font-bold text-sm text-white">Proposal & Budget Drafter</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Converts rough engineering concepts into polished problem statements, BOM budgets, and milestone schedules.
-              </p>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.05, rotateY: 5, rotateX: 5 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="p-5 rounded-2xl border border-slate-800 bg-slate-900 space-y-3 cursor-pointer"
-            >
-              <Cpu className="w-6 h-6 text-emerald-400" />
-              <h3 className="font-bold text-sm text-white">Milestone Verification</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Analyzes submitted benchmark test reports and hardware evidence to output transparent risk ratings.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </motion.section>
-
-      {/* 5. How Funding Works with PayPal */}
+      {/* 6. PayPal Developer Sandbox Checkout Card */}
       <motion.section
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6 }}
         className="py-20 px-4 sm:px-8 border-t border-slate-800/80"
       >
@@ -492,12 +862,12 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
-      {/* 6. Frequently Asked Questions */}
+      {/* 7. Frequently Asked Questions */}
       <motion.section
         id="faq"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6 }}
         className="py-20 px-4 sm:px-8 border-t border-slate-800/80"
       >
@@ -535,7 +905,51 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
-      {/* 7. Footer */}
+      {/* 8. Cinematic Footer Transition with Expanding Glowing Orb */}
+      <section ref={footerRef} className="relative py-28 px-4 sm:px-8 border-t border-slate-800 bg-slate-950 overflow-hidden">
+        {/* Expanding Glowing Orb */}
+        <motion.div
+          style={{ scale: orbScale, opacity: orbOpacity }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] rounded-full bg-gradient-to-tr from-blue-600/30 via-indigo-600/30 to-violet-600/30 blur-[100px] pointer-events-none"
+        />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 mx-auto flex items-center justify-center text-white shadow-2xl shadow-blue-500/40"
+          >
+            <Sparkles className="w-8 h-8" />
+          </motion.div>
+
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            Ready to organize group money & fund great ideas?
+          </h2>
+
+          <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
+            Join students and innovators managing expenses with mathematical precision and crowdfunding prototypes with PayPal.
+          </p>
+
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/dashboard"
+              className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-xl shadow-blue-600/30 transition-all active:scale-[0.98]"
+            >
+              Open Live Dashboard
+            </Link>
+            <Link
+              href="/slides"
+              className="px-6 py-3.5 rounded-2xl border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold text-sm transition-all active:scale-[0.98]"
+            >
+              View In-App Pitch Deck
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. Final Footer */}
       <footer className="border-t border-slate-800 bg-slate-950 py-12 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-slate-500">
           <div className="flex items-center gap-2">

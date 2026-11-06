@@ -25,10 +25,10 @@ export default function GroupsPage() {
     <AppLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
           <div>
-            <h1 className="text-2xl font-bold text-white">My Expense Groups</h1>
-            <p className="text-xs text-slate-400">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Expense Groups</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Manage shared costs for trips, hostel living, labs, and college fests
             </p>
           </div>
@@ -36,7 +36,7 @@ export default function GroupsPage() {
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => setShowJoin(true)}
-              className="px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
             >
               <UserPlus className="w-3.5 h-3.5" />
               <span>Join via Code</span>
@@ -60,16 +60,16 @@ export default function GroupsPage() {
             return (
               <div
                 key={group.id}
-                className="rounded-3xl border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col justify-between group hover:border-slate-700 transition-all shadow-lg shadow-black/20"
+                className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden flex flex-col justify-between group hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-md dark:shadow-lg dark:shadow-black/20"
               >
                 <div>
-                  <div className="h-40 relative overflow-hidden bg-slate-800">
+                  <div className="h-40 relative overflow-hidden bg-slate-100 dark:bg-slate-800">
                     <img
                       src={group.imageUrl || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800'}
                       alt={group.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-[11px] font-mono font-bold text-slate-200">
+                    <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-[11px] font-mono font-bold text-white shadow-sm">
                       <span>{group.inviteCode}</span>
                       <button
                         onClick={() => copyCode(group.inviteCode)}
@@ -79,26 +79,26 @@ export default function GroupsPage() {
                         {copiedCode === group.inviteCode ? (
                           <Check className="w-3 h-3 text-emerald-400" />
                         ) : (
-                          <Copy className="w-3 h-3 text-slate-400" />
+                          <Copy className="w-3 h-3 text-slate-300" />
                         )}
                       </button>
                     </div>
                   </div>
 
                   <div className="p-5 space-y-3">
-                    <h2 className="font-bold text-base text-white">{group.name}</h2>
-                    <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                    <h2 className="font-bold text-base text-slate-900 dark:text-white">{group.name}</h2>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                       {group.description || 'Shared expense tracking'}
                     </p>
 
-                    <div className="pt-2 flex items-center justify-between text-xs border-t border-slate-800/80">
-                      <div className="flex items-center gap-1.5 text-slate-400">
+                    <div className="pt-2 flex items-center justify-between text-xs border-t border-slate-100 dark:border-slate-800/80">
+                      <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
                         <Users className="w-3.5 h-3.5" />
                         <span>{group.members.length} members</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] text-slate-400 block">Total Spent</span>
-                        <span className="font-mono font-bold text-white">
+                        <span className="text-[10px] text-slate-500 dark:text-slate-400 block">Total Spent</span>
+                        <span className="font-mono font-bold text-slate-900 dark:text-white">
                           {formatPaise(group.totalSpentPaise)}
                         </span>
                       </div>
@@ -109,7 +109,7 @@ export default function GroupsPage() {
                 <div className="p-5 pt-0">
                   <Link
                     href={`/groups/${group.id}`}
-                    className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                    className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
                   >
                     <span>Open Group Details</span>
                     <ArrowRight className="w-3.5 h-3.5" />

@@ -30,10 +30,10 @@ export default function ExpensesPage() {
     <AppLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
           <div>
-            <h1 className="text-2xl font-bold text-white">Expenses Ledger</h1>
-            <p className="text-xs text-slate-400">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Expenses Ledger</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Audit and track shared expenses with verified split calculations
             </p>
           </div>
@@ -50,13 +50,13 @@ export default function ExpensesPage() {
         {/* Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search expenses or payer..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-xs focus:outline-none focus:border-blue-500 shadow-sm"
             />
           </div>
 
@@ -64,7 +64,7 @@ export default function ExpensesPage() {
             <select
               value={selectedGroup}
               onChange={(e) => setSelectedGroup(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white text-xs focus:outline-none focus:border-blue-500"
+              className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-blue-500 shadow-sm"
             >
               <option value="all">All Groups</option>
               {groups.map((g) => (
@@ -79,7 +79,7 @@ export default function ExpensesPage() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-900 text-white text-xs focus:outline-none focus:border-blue-500"
+              className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs focus:outline-none focus:border-blue-500 shadow-sm"
             >
               <option value="all">All Categories</option>
               <option>Food & Drinks</option>
@@ -94,10 +94,10 @@ export default function ExpensesPage() {
         </div>
 
         {/* Expense List */}
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/60 overflow-hidden divide-y divide-slate-800">
-          <div className="p-4 bg-slate-950/40 flex items-center justify-between text-xs font-semibold text-slate-400">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800 shadow-sm">
+          <div className="p-4 bg-slate-50 dark:bg-slate-950/40 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
             <span>Showing {filteredExpenses.length} transactions</span>
-            <span className="font-mono text-white">
+            <span className="font-mono text-slate-900 dark:text-white font-bold">
               Total: {formatPaise(totalFilteredPaise)}
             </span>
           </div>
@@ -110,44 +110,44 @@ export default function ExpensesPage() {
             filteredExpenses.map((exp) => (
               <div
                 key={exp.id}
-                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-900 transition-colors"
+                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors"
               >
                 <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center shrink-0 text-slate-300 font-bold text-xs">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 text-slate-700 dark:text-slate-300 font-bold text-xs">
                     {exp.category[0]}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-sm text-white">{exp.title}</h3>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">
+                      <h3 className="font-bold text-sm text-slate-900 dark:text-white">{exp.title}</h3>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                         {exp.category}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      <Link href={`/groups/${exp.groupId}`} className="text-blue-400 hover:underline">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      <Link href={`/groups/${exp.groupId}`} className="text-blue-600 dark:text-blue-400 hover:underline">
                         {exp.groupName}
                       </Link>{' '}
-                      &bull; Paid by <span className="text-slate-200">{exp.paidByUserName}</span> on {exp.date}
+                      &bull; Paid by <span className="text-slate-700 dark:text-slate-200 font-medium">{exp.paidByUserName}</span> on {exp.date}
                     </p>
                     {exp.description && (
-                      <p className="text-xs text-slate-400 mt-1 italic">&ldquo;{exp.description}&rdquo;</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 italic">&ldquo;{exp.description}&rdquo;</p>
                     )}
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between sm:justify-end gap-5 shrink-0">
                   <div className="text-right">
-                    <span className="font-mono font-bold text-white text-base">
+                    <span className="font-mono font-bold text-slate-900 dark:text-white text-base">
                       {formatPaise(exp.amountPaise)}
                     </span>
-                    <span className="text-[10px] text-slate-400 block capitalize">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block capitalize">
                       {exp.splitType} split ({exp.splits.length} members)
                     </span>
                   </div>
 
                   <button
                     onClick={() => deleteExpense(exp.id)}
-                    className="p-2 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-950/30 transition-colors"
+                    className="p-2 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                     title="Delete expense"
                   >
                     <Trash2 className="w-4 h-4" />

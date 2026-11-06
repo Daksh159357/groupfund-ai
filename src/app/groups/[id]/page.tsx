@@ -111,8 +111,8 @@ function GroupDetailContent() {
     <AppLayout>
       <div className="space-y-6">
         {/* Group Header Card */}
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/80 overflow-hidden shadow-xl">
-          <div className="h-44 relative bg-slate-800">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 overflow-hidden shadow-xl">
+          <div className="h-44 relative bg-slate-900">
             <img
               src={group.imageUrl || 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200'}
               alt={group.name}
@@ -126,13 +126,13 @@ function GroupDetailContent() {
                   CODE: {group.inviteCode}
                 </span>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">{group.name}</h1>
-                <p className="text-xs text-slate-300 max-w-xl">{group.description}</p>
+                <p className="text-xs text-slate-200 max-w-xl">{group.description}</p>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={copyInviteLink}
-                  className="px-3 py-2 rounded-xl border border-slate-700 bg-slate-900/90 text-slate-200 text-xs font-semibold hover:bg-slate-800 flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-2 rounded-xl border border-white/20 bg-slate-900/90 text-white text-xs font-semibold hover:bg-slate-800 flex items-center gap-1.5 transition-colors shadow-sm"
                 >
                   {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
                   <span>{copiedLink ? 'Link Copied!' : 'Share Invite'}</span>
@@ -150,30 +150,30 @@ function GroupDetailContent() {
           </div>
 
           {/* Group Stat Strip */}
-          <div className="p-4 sm:px-6 bg-slate-950/60 border-t border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+          <div className="p-4 sm:px-6 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
             <div>
-              <span className="text-slate-400 block">Total Expenditure</span>
-              <span className="font-mono font-bold text-white text-base">
+              <span className="text-slate-500 dark:text-slate-400 block">Total Expenditure</span>
+              <span className="font-mono font-bold text-slate-900 dark:text-white text-base">
                 {formatPaise(totalSpentPaise)}
               </span>
             </div>
             <div>
-              <span className="text-slate-400 block">Recorded Expenses</span>
-              <span className="font-bold text-white text-base">{groupExpenses.length} bills</span>
+              <span className="text-slate-500 dark:text-slate-400 block">Recorded Expenses</span>
+              <span className="font-bold text-slate-900 dark:text-white text-base">{groupExpenses.length} bills</span>
             </div>
             <div>
-              <span className="text-slate-400 block">Participants</span>
-              <span className="font-bold text-white text-base">{group.members.length} members</span>
+              <span className="text-slate-500 dark:text-slate-400 block">Participants</span>
+              <span className="font-bold text-slate-900 dark:text-white text-base">{group.members.length} members</span>
             </div>
             <div>
-              <span className="text-slate-400 block">Pending Transfers</span>
-              <span className="font-bold text-amber-400 text-base">{debtPlan.length} to clear</span>
+              <span className="text-slate-500 dark:text-slate-400 block">Pending Transfers</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400 text-base">{debtPlan.length} to clear</span>
             </div>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+        <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
           {[
             { id: 'expenses', label: `Expenses (${groupExpenses.length})`, icon: Receipt },
             { id: 'balances', label: 'Balances & Net Share', icon: Scale },
@@ -187,8 +187,8 @@ function GroupDetailContent() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`py-2 px-3.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all ${
                   activeTab === tab.id
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-500/30'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+                    ? 'bg-blue-600/15 text-blue-700 dark:text-blue-300 border border-blue-500/30'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-900/60'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -202,9 +202,9 @@ function GroupDetailContent() {
         {activeTab === 'expenses' && (
           <div className="space-y-4">
             {groupExpenses.length === 0 ? (
-              <div className="text-center py-16 rounded-3xl border border-slate-800 bg-slate-900/40 p-6 space-y-3">
-                <Receipt className="w-10 h-10 text-slate-600 mx-auto" />
-                <p className="text-sm font-semibold text-slate-300">No expenses recorded yet</p>
+              <div className="text-center py-16 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-6 space-y-3">
+                <Receipt className="w-10 h-10 text-slate-400 dark:text-slate-600 mx-auto" />
+                <p className="text-sm font-semibold text-slate-800 dark:text-slate-300">No expenses recorded yet</p>
                 <p className="text-xs text-slate-500 max-w-sm mx-auto">
                   Snap a bill or enter expenses manually. All participants will be split accurately.
                 </p>
@@ -216,40 +216,40 @@ function GroupDetailContent() {
                 </button>
               </div>
             ) : (
-              <div className="rounded-3xl border border-slate-800 bg-slate-900/60 overflow-hidden divide-y divide-slate-800">
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800 shadow-sm">
                 {groupExpenses.map((exp) => (
                   <div
                     key={exp.id}
-                    className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-900 transition-colors"
+                    className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors"
                   >
                     <div className="flex items-start gap-3.5">
-                      <div className="w-11 h-11 rounded-2xl bg-slate-800 flex items-center justify-center shrink-0 text-slate-300 font-bold text-sm">
+                      <div className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 text-slate-700 dark:text-slate-300 font-bold text-sm">
                         {exp.category[0]}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="font-bold text-sm text-white">{exp.title}</h3>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 capitalize">
+                          <h3 className="font-bold text-sm text-slate-900 dark:text-white">{exp.title}</h3>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 capitalize">
                             {exp.category}
                           </span>
                           {exp.receiptUrl && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-semibold">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-700 dark:text-blue-300 font-semibold">
                               Receipt OCR
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-400 mt-0.5">
-                          Paid by <span className="text-slate-200 font-semibold">{exp.paidByUserName}</span> on {exp.date} &bull; {exp.splitType} split across {exp.splits.length} people
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                          Paid by <span className="text-slate-800 dark:text-slate-200 font-semibold">{exp.paidByUserName}</span> on {exp.date} &bull; {exp.splitType} split across {exp.splits.length} people
                         </p>
                         {exp.description && (
-                          <p className="text-xs text-slate-400 mt-1 italic">&ldquo;{exp.description}&rdquo;</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 italic">&ldquo;{exp.description}&rdquo;</p>
                         )}
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0">
                       <div className="text-right">
-                        <span className="font-mono font-bold text-white text-base">
+                        <span className="font-mono font-bold text-slate-900 dark:text-white text-base">
                           {formatPaise(exp.amountPaise)}
                         </span>
                         <span className="text-[10px] text-slate-500 block">Total cost</span>
@@ -257,7 +257,7 @@ function GroupDetailContent() {
 
                       <button
                         onClick={() => deleteExpense(exp.id)}
-                        className="p-2 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-950/30 transition-colors"
+                        className="p-2 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                         title="Delete expense"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -272,11 +272,11 @@ function GroupDetailContent() {
 
         {/* Tab 2: Balances & Net Share */}
         {activeTab === 'balances' && (
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/60 overflow-hidden p-6 space-y-4">
+          <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden p-6 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-white">Group Net Balances</h3>
-                <p className="text-xs text-slate-400">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Group Net Balances</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Exact financial standing: amount paid vs. allocated consumption share
                 </p>
               </div>
@@ -285,37 +285,37 @@ function GroupDetailContent() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400">
+                  <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
                     <th className="pb-3 font-semibold">Member</th>
                     <th className="pb-3 font-semibold">Total Paid</th>
                     <th className="pb-3 font-semibold">Total Share</th>
                     <th className="pb-3 font-semibold text-right">Net Balance</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                   {balances.map((b) => (
-                    <tr key={b.userId} className="hover:bg-slate-900/40">
+                    <tr key={b.userId} className="hover:bg-slate-50 dark:hover:bg-slate-900/40">
                       <td className="py-3.5 flex items-center gap-2.5">
                         <img src={b.avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" />
                         <div>
-                          <p className="font-semibold text-slate-200">
+                          <p className="font-semibold text-slate-900 dark:text-slate-200">
                             {b.userName} {b.userId === currentUser.id ? '(You)' : ''}
                           </p>
                         </div>
                       </td>
-                      <td className="py-3.5 font-mono text-slate-300">
+                      <td className="py-3.5 font-mono text-slate-700 dark:text-slate-300 font-medium">
                         {formatPaise(b.totalPaidPaise)}
                       </td>
-                      <td className="py-3.5 font-mono text-slate-300">
+                      <td className="py-3.5 font-mono text-slate-700 dark:text-slate-300 font-medium">
                         {formatPaise(b.totalSharePaise)}
                       </td>
                       <td className="py-3.5 text-right font-mono font-bold">
                         {b.netPaise > 0 ? (
-                          <span className="text-emerald-400">+{formatPaise(b.netPaise)} (Receives)</span>
+                          <span className="text-emerald-600 dark:text-emerald-400">+{formatPaise(b.netPaise)} (Receives)</span>
                         ) : b.netPaise < 0 ? (
-                          <span className="text-amber-400">-{formatPaise(Math.abs(b.netPaise))} (Owes)</span>
+                          <span className="text-amber-600 dark:text-amber-400">-{formatPaise(Math.abs(b.netPaise))} (Owes)</span>
                         ) : (
-                          <span className="text-slate-400">₹0.00 (Settled)</span>
+                          <span className="text-slate-500 dark:text-slate-400">₹0.00 (Settled)</span>
                         )}
                       </td>
                     </tr>
@@ -329,15 +329,15 @@ function GroupDetailContent() {
         {/* Tab 3: Settlement Plan (Debt Simplification) */}
         {activeTab === 'settlements' && (
           <div className="space-y-6">
-            <div className="p-6 rounded-3xl border border-slate-800 bg-slate-900/60 space-y-4">
+            <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 space-y-4 shadow-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-400 font-semibold mb-1">
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold mb-1">
                     <Sparkles className="w-3 h-3" />
                     <span>Min-Cash-Flow Optimal Plan</span>
                   </div>
-                  <h3 className="text-base font-bold text-white">Suggested Direct Settlements</h3>
-                  <p className="text-xs text-slate-400">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Suggested Direct Settlements</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Settle all debts in the fewest possible peer-to-peer transfers
                   </p>
                 </div>

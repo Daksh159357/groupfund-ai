@@ -45,7 +45,7 @@ export function Navbar() {
   const balanceSummary = getUserBalanceSummary();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md px-4 sm:px-6 py-2.5">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md px-4 sm:px-6 py-2.5">
       <div className="flex items-center justify-between gap-4 max-w-7xl mx-auto">
         {/* Brand / Logo */}
         <div className="flex items-center gap-3">
@@ -54,10 +54,10 @@ export function Navbar() {
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+              <div className="font-bold text-lg tracking-tight text-slate-900 dark:text-white">
                 GroupFund <span className="text-blue-500 font-extrabold">AI</span>
               </div>
-              <div className="text-[10px] text-slate-400 tracking-wider uppercase font-semibold hidden sm:block">
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 tracking-wider uppercase font-semibold hidden sm:block">
                 Expenses &bull; Innovation Crowdfunding
               </div>
             </div>
@@ -67,26 +67,26 @@ export function Navbar() {
         {/* Quick Balance Pill (Desktop) */}
         <div className="hidden md:flex items-center gap-3">
           {isMounted ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-800 bg-slate-900/60 text-xs">
-              <span className="text-slate-400">Net Group Balance:</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/60 text-xs">
+              <span className="text-slate-600 dark:text-slate-400 font-medium">Net Group Balance:</span>
               <span
                 className={`font-semibold ${
                   balanceSummary.netPaise > 0
-                    ? 'text-emerald-400'
+                    ? 'text-emerald-600 dark:text-emerald-400'
                     : balanceSummary.netPaise < 0
-                    ? 'text-amber-400'
-                    : 'text-slate-300'
+                    ? 'text-amber-600 dark:text-amber-400'
+                    : 'text-slate-700 dark:text-slate-300'
                 }`}
               >
                 {balanceSummary.netPaise > 0 ? '+' : ''}
                 {formatPaise(balanceSummary.netPaise)}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-400 font-semibold">
                 {balanceSummary.netPaise >= 0 ? 'Receivable' : 'Owed'}
               </span>
             </div>
           ) : (
-            <div className="h-7 w-48 rounded-full bg-slate-900/60 border border-slate-800 animate-pulse" />
+            <div className="h-7 w-48 rounded-full bg-slate-200 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 animate-pulse" />
           )}
         </div>
 
@@ -96,9 +96,9 @@ export function Navbar() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors"
+            className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
           >
-            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-blue-400" />}
+            {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-blue-500" />}
           </button>
 
           {/* Notifications Dropdown */}
@@ -108,22 +108,22 @@ export function Navbar() {
                 setShowNotifMenu(!showNotifMenu);
                 setShowUserMenu(false);
               }}
-              className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors"
+              className="relative p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
               aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
               {isMounted && unreadNotifs.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-blue-500 rounded-full ring-2 ring-slate-950 animate-pulse" />
+                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-blue-500 rounded-full ring-2 ring-white dark:ring-slate-950 animate-pulse" />
               )}
             </button>
 
             {showNotifMenu && (
-              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-3 z-50 animate-in fade-in slide-in-from-top-2">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-800 px-2">
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl p-3 z-50 animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800 px-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-sm text-white">Notifications</span>
+                    <span className="font-semibold text-sm text-slate-900 dark:text-white">Notifications</span>
                     {isMounted && unreadNotifs.length > 0 && (
-                      <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-blue-500/20 text-blue-400 font-bold">
+                      <span className="px-1.5 py-0.5 text-[10px] rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 font-bold">
                         {unreadNotifs.length} new
                       </span>
                     )}
@@ -131,14 +131,14 @@ export function Navbar() {
                   {unreadNotifs.length > 0 && (
                     <button
                       onClick={() => markAllNotificationsRead()}
-                      className="text-xs text-blue-400 hover:underline"
+                      className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
                     >
                       Mark all read
                     </button>
                   )}
                 </div>
 
-                <div className="max-h-72 overflow-y-auto divide-y divide-slate-800/60 my-1">
+                <div className="max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60 my-1">
                   {notifications.length === 0 ? (
                     <div className="text-center py-6 text-xs text-slate-500">No notifications yet</div>
                   ) : (
@@ -150,18 +150,18 @@ export function Navbar() {
                           setShowNotifMenu(false);
                         }}
                         className={`p-2.5 rounded-xl cursor-pointer transition-colors ${
-                          !n.isRead ? 'bg-blue-950/20 hover:bg-blue-900/30' : 'hover:bg-slate-800/40'
+                          !n.isRead ? 'bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-900/30' : 'hover:bg-slate-100 dark:hover:bg-slate-800/40'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-2">
-                          <p className="text-xs font-semibold text-slate-200">{n.title}</p>
+                          <p className="text-xs font-semibold text-slate-900 dark:text-slate-200">{n.title}</p>
                           <span className="text-[10px] text-slate-500 whitespace-nowrap">
                             {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">{n.message}</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 line-clamp-2">{n.message}</p>
                         {n.link && (
-                          <Link href={n.link} className="text-[10px] text-blue-400 hover:underline mt-1 inline-block">
+                          <Link href={n.link} className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">
                             View details &rarr;
                           </Link>
                         )}
@@ -170,11 +170,11 @@ export function Navbar() {
                   )}
                 </div>
 
-                <div className="pt-2 border-t border-slate-800 text-center">
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 text-center">
                   <Link
                     href="/notifications"
                     onClick={() => setShowNotifMenu(false)}
-                    className="text-xs text-slate-400 hover:text-white"
+                    className="text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                   >
                     View all notifications
                   </Link>
@@ -183,44 +183,44 @@ export function Navbar() {
             )}
           </div>
 
-          {/* Quick User Switcher Dropdown (Interactive Pair Programming & Demo Feature) */}
+          {/* Quick User Switcher Dropdown */}
           <div className="relative">
             <button
               onClick={() => {
                 setShowUserMenu(!showUserMenu);
                 setShowNotifMenu(false);
               }}
-              className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-slate-800 bg-slate-900 hover:border-slate-700 transition-colors"
+              className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
             >
               <img
                 src={currentUser.avatarUrl}
                 alt={currentUser.fullName}
                 className="w-6 h-6 rounded-full object-cover ring-1 ring-blue-500/50"
               />
-              <span className="text-xs font-medium text-slate-200 hidden sm:inline-block max-w-[100px] truncate">
+              <span className="text-xs font-medium text-slate-800 dark:text-slate-200 hidden sm:inline-block max-w-[100px] truncate">
                 {currentUser.fullName}
               </span>
               {currentUser.role === 'admin' && (
-                <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1 py-0.5 rounded font-bold">
+                <span className="text-[9px] bg-purple-500/20 text-purple-600 dark:text-purple-300 px-1 py-0.5 rounded font-bold">
                   ADMIN
                 </span>
               )}
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
             </button>
 
             {showUserMenu && (
-              <div className="absolute right-0 mt-2 w-72 rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2">
-                <div className="p-2 border-b border-slate-800">
-                  <p className="text-xs font-semibold text-white">{currentUser.fullName}</p>
-                  <p className="text-[11px] text-slate-400">{currentUser.email}</p>
-                  <p className="text-[10px] text-blue-400 font-medium mt-0.5">
+              <div className="absolute right-0 mt-2 w-72 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2">
+                <div className="p-2 border-b border-slate-200 dark:border-slate-800">
+                  <p className="text-xs font-semibold text-slate-900 dark:text-white">{currentUser.fullName}</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{currentUser.email}</p>
+                  <p className="text-[10px] text-blue-600 dark:text-blue-400 font-medium mt-0.5">
                     {currentUser.institution || 'Independent Innovator'} &bull; {currentUser.areaOfInterest}
                   </p>
                 </div>
 
                 {/* Role Switcher for Hackathon Testing */}
                 <div className="py-2">
-                  <p className="text-[10px] uppercase font-bold text-slate-400 px-2 mb-1.5">
+                  <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 px-2 mb-1.5">
                     Switch Test Account:
                   </p>
                   <div className="space-y-1">
@@ -233,8 +233,8 @@ export function Navbar() {
                         }}
                         className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
                           user.id === currentUser.id
-                            ? 'bg-blue-600/20 text-blue-300 font-semibold'
-                            : 'text-slate-300 hover:bg-slate-800/60'
+                            ? 'bg-blue-600/15 text-blue-700 dark:text-blue-300 font-semibold'
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60'
                         }`}
                       >
                         <div className="flex items-center gap-2">
@@ -246,40 +246,40 @@ export function Navbar() {
                           <span className="truncate">{user.fullName}</span>
                         </div>
                         {user.role === 'admin' ? (
-                          <span className="text-[9px] bg-purple-500/20 text-purple-300 px-1 rounded">Admin</span>
+                          <span className="text-[9px] bg-purple-500/20 text-purple-700 dark:text-purple-300 px-1 rounded">Admin</span>
                         ) : (
-                          user.id === currentUser.id && <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
+                          user.id === currentUser.id && <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                         )}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800 space-y-0.5">
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-0.5">
                   <Link
                     href="/profile"
                     onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60"
+                    className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                   >
-                    <User className="w-3.5 h-3.5 text-slate-400" />
+                    <User className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                     My Profile
                   </Link>
                   {currentUser.role === 'admin' && (
                     <Link
                       href="/admin"
                       onClick={() => setShowUserMenu(false)}
-                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs text-purple-300 hover:bg-purple-950/40"
+                      className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-950/40"
                     >
-                      <Shield className="w-3.5 h-3.5 text-purple-400" />
+                      <Shield className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                       Admin Control Panel
                     </Link>
                   )}
                   <Link
                     href="/"
                     onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs text-rose-400 hover:bg-rose-950/30"
+                    className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
                   >
-                    <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                    <LogOut className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                     Sign Out (Demo Landing)
                   </Link>
                 </div>
