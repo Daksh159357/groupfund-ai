@@ -7,6 +7,7 @@ Copy and paste the sections below directly into the Devpost submission form.
 ### 1. General Project Details
 
 - **Project Name:** GroupFund AI
+- **GitHub Repository:** https://github.com/Daksh159357/groupfund-ai
 - **Elevator Pitch:**  
   Manage group money and fund student innovation on one AI-powered platform. Split trips seamlessly and crowdfund robotics projects with PayPal.
 
