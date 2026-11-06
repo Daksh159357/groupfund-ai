@@ -88,7 +88,7 @@ Powered by **Google Gemini 2.5 Flash** with low latency and multimodal vision ca
 
 ### 2. Clone & Install
 ```bash
-git clone https://github.com/daksh-robodev/groupfund-ai.git
+git clone https://github.com/Daksh159357/groupfund-ai.git
 cd groupfund-ai
 npm install
 ```
