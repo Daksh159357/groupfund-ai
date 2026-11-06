@@ -86,3 +86,4 @@ GroupFund AI unites two modules on a single shared financial ledger:
 - **Rating of the PayPal APIs & Developer Experience:** 10 / 10
 - **What worked well?** The PayPal REST Orders v2 documentation and sandbox dashboard made creating merchant apps, tracking sandbox accounts, and inspecting webhook events intuitive and straightforward.
 - **What could be improved?** Clearer developer documentation on sandbox domestic currency restrictions (e.g. India INR domestic limitations) would save developers significant debugging time.
+
