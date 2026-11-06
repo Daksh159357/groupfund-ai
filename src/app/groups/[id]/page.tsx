@@ -32,9 +32,7 @@ import { SettlementModal } from '@/components/settlements/SettlementModal';
 function GroupDetailContent() {
   const routeParams = useParams();
   const id = (routeParams?.id as string) || '';
-  const { groups, expenses, settlements, currentUser, deleteExpense, markSettlementCompleted } = useApp();
-
-  const group = groups.find((g) => g.id === id);
+  const { groups, expenses, settlements, currentUser, isHydrated, deleteExpense, markSettlementCompleted } = useApp();
 
   const [activeTab, setActiveTab] = useState<'expenses' | 'balances' | 'settlements' | 'members'>('expenses');
   const [showAddExpense, setShowAddExpense] = useState(false);
@@ -43,6 +41,33 @@ function GroupDetailContent() {
   const [settleAmountPaise, setSettleAmountPaise] = useState<number | undefined>(undefined);
   const [copiedLink, setCopiedLink] = useState(false);
   const [reminderSent, setReminderSent] = useState<string | null>(null);
+
+  // If store is still hydrating from localStorage, show loading skeleton
+  if (!isHydrated) {
+    return (
+      <AppLayout>
+        <div className="space-y-6 animate-pulse">
+          <div className="h-44 rounded-3xl bg-slate-900 border border-slate-800" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="h-20 rounded-2xl bg-slate-900 border border-slate-800" />
+            <div className="h-20 rounded-2xl bg-slate-900 border border-slate-800" />
+            <div className="h-20 rounded-2xl bg-slate-900 border border-slate-800" />
+            <div className="h-20 rounded-2xl bg-slate-900 border border-slate-800" />
+          </div>
+          <div className="h-64 rounded-2xl bg-slate-900 border border-slate-800" />
+        </div>
+      </AppLayout>
+    );
+  }
+
+  // Find group by either group.id or inviteCode (case-insensitive)
+  const group = groups.find(
+    (g) =>
+      g.id === id ||
+      g.inviteCode === id ||
+      g.id.toLowerCase() === id.toLowerCase() ||
+      g.inviteCode?.toLowerCase() === id.toLowerCase()
+  );
 
   if (!group) {
     return (
@@ -57,6 +82,7 @@ function GroupDetailContent() {
     );
   }
 
+  // Filter expenses and settlements matching the canonical group.id
   const groupExpenses = expenses.filter((e) => e.groupId === group.id);
   const groupSettlements = settlements.filter((s) => s.groupId === group.id);
 
@@ -64,7 +90,10 @@ function GroupDetailContent() {
   const balances = calculateGroupBalances(group.members, groupExpenses, groupSettlements);
   const debtPlan = calculateSimplifiedSettlements(balances);
 
-  const totalSpentPaise = groupExpenses.reduce((acc, e) => acc + e.amountPaise, 0);
+  const totalSpentPaise =
+    groupExpenses.length > 0
+      ? groupExpenses.reduce((acc, e) => acc + e.amountPaise, 0)
+      : group.totalSpentPaise;
 
   const copyInviteLink = () => {
     const url = `${window.location.origin}/groups?code=${group.inviteCode}`;

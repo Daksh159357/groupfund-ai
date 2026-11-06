@@ -57,3 +57,4 @@ Every push to your GitHub repository `main` branch automatically triggers a rebu
 2. Runs `npm install` and compiles Next.js with `npm run build`.
 3. Boots the container with `npm run start` on port 10000.
 4. Verify by opening [https://groupfund-ai.onrender.com/dashboard](https://groupfund-ai.onrender.com/dashboard).
+

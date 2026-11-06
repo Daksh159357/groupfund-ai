@@ -298,6 +298,66 @@ export const INITIAL_EXPENSES: Expense[] = [
     ],
     createdAt: '2026-02-04T18:20:00Z',
   },
+  {
+    id: 'exp-robolab-1',
+    groupId: 'group-robolab',
+    groupName: 'Robotics Lab & Hostel',
+    title: 'PLA 3D Printer Filament & Soldering Flux',
+    description: '2 rolls black PLA filament and rosin core solder wire for chassis prototype',
+    amountPaise: 185000, // ₹1,850.00 paid by Daksh
+    category: 'Equipment',
+    paidByUserId: 'user-daksh',
+    paidByUserName: 'Daksh Sharma',
+    date: '2026-01-20',
+    receiptUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600',
+    splitType: 'equal',
+    splits: [
+      { userId: 'user-daksh', userName: 'Daksh Sharma', amountPaise: 61667 },
+      { userId: 'user-rahul', userName: 'Rahul Verma', amountPaise: 61667 },
+      { userId: 'user-sneha', userName: 'Sneha Reddy', amountPaise: 61666 },
+    ],
+    createdAt: '2026-01-20T11:00:00Z',
+  },
+  {
+    id: 'exp-robolab-2',
+    groupId: 'group-robolab',
+    groupName: 'Robotics Lab & Hostel',
+    title: 'Ultrasonic Sensors & Breadboard Wires',
+    description: '4x HC-SR04 distance sensors and 120-piece DuPont jumper wire kit',
+    amountPaise: 120000, // ₹1,200.00 paid by Rahul
+    category: 'Components',
+    paidByUserId: 'user-rahul',
+    paidByUserName: 'Rahul Verma',
+    date: '2026-01-24',
+    receiptUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600',
+    splitType: 'equal',
+    splits: [
+      { userId: 'user-daksh', userName: 'Daksh Sharma', amountPaise: 40000 },
+      { userId: 'user-rahul', userName: 'Rahul Verma', amountPaise: 40000 },
+      { userId: 'user-sneha', userName: 'Sneha Reddy', amountPaise: 40000 },
+    ],
+    createdAt: '2026-01-24T14:30:00Z',
+  },
+  {
+    id: 'exp-robolab-3',
+    groupId: 'group-robolab',
+    groupName: 'Robotics Lab & Hostel',
+    title: 'Late-Night Lab Pizza & Cold Drinks',
+    description: 'Dinner order during sprint hack night',
+    amountPaise: 120000, // ₹1,200.00 paid by Sneha
+    category: 'Food & Drinks',
+    paidByUserId: 'user-sneha',
+    paidByUserName: 'Sneha Reddy',
+    date: '2026-01-28',
+    receiptUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600',
+    splitType: 'equal',
+    splits: [
+      { userId: 'user-daksh', userName: 'Daksh Sharma', amountPaise: 40000 },
+      { userId: 'user-rahul', userName: 'Rahul Verma', amountPaise: 40000 },
+      { userId: 'user-sneha', userName: 'Sneha Reddy', amountPaise: 40000 },
+    ],
+    createdAt: '2026-01-28T22:15:00Z',
+  },
 ];
 
 // Initial Settlements
@@ -703,10 +763,20 @@ class Store {
       if (storedUser) this.currentUser = JSON.parse(storedUser);
 
       const storedGroups = localStorage.getItem(STORAGE_KEYS.GROUPS);
-      if (storedGroups) this.groups = JSON.parse(storedGroups);
+      if (storedGroups) {
+        const parsed: Group[] = JSON.parse(storedGroups);
+        const existingIds = new Set(parsed.map((g) => g.id));
+        const missingInitial = INITIAL_GROUPS.filter((g) => !existingIds.has(g.id));
+        this.groups = [...parsed, ...missingInitial];
+      }
 
       const storedExpenses = localStorage.getItem(STORAGE_KEYS.EXPENSES);
-      if (storedExpenses) this.expenses = JSON.parse(storedExpenses);
+      if (storedExpenses) {
+        const parsed: Expense[] = JSON.parse(storedExpenses);
+        const existingIds = new Set(parsed.map((e) => e.id));
+        const missingInitial = INITIAL_EXPENSES.filter((e) => !existingIds.has(e.id));
+        this.expenses = [...parsed, ...missingInitial];
+      }
 
       const storedSettlements = localStorage.getItem(STORAGE_KEYS.SETTLEMENTS);
       if (storedSettlements) this.settlements = JSON.parse(storedSettlements);
