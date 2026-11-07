@@ -94,6 +94,26 @@ function CountUpNumber({ end, duration = 1.2 }: { end: number; duration?: number
   );
 }
 
+// 4-Directional Flying Scroll Variants for The GroupFund Advantage
+const advantageVariants = {
+  topLeft: {
+    initial: { opacity: 0, x: -500, rotate: -15 },
+    animate: { opacity: 1, x: 0, rotate: 0 },
+  },
+  topRight: {
+    initial: { opacity: 0, x: 500, rotate: 15 },
+    animate: { opacity: 1, x: 0, rotate: 0 },
+  },
+  bottomLeft: {
+    initial: { opacity: 0, y: -500, rotate: -10 },
+    animate: { opacity: 1, y: 0, rotate: 0 },
+  },
+  bottomRight: {
+    initial: { opacity: 0, y: 500, rotate: 10 },
+    animate: { opacity: 1, y: 0, rotate: 0 },
+  },
+};
+
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -212,6 +232,7 @@ export default function LandingPage() {
 
           <nav className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-300">
             <a href="#expenses" className="hover:text-blue-400 transition-colors">Group Expenses</a>
+            <a href="#advantage" className="hover:text-blue-400 transition-colors">Advantage</a>
             <a href="#projects" className="hover:text-blue-400 transition-colors">Innovation Funding</a>
             <a href="#ai" className="hover:text-blue-400 transition-colors">AI Features</a>
             <a href="#faq" className="hover:text-blue-400 transition-colors">FAQ</a>
@@ -760,7 +781,162 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 5. Discover Innovation Projects */}
+      {/* 5. The GroupFund Advantage: 4-Directional Flying Scroll Animation */}
+      <section id="advantage" className="relative w-full overflow-hidden py-24 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950">
+        {/* Subtle Ambient Radial Lighting */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-indigo-500/5 to-transparent pointer-events-none" />
+
+        <div className="max-w-5xl mx-auto px-4 space-y-14 relative z-10">
+          <div className="text-center space-y-3">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-sm">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>The GroupFund Advantage</span>
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Built Different for Real Campus Life.
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Why student engineering teams, roommates, and innovators choose our unified AI ledger over disconnected spreadsheets and payment apps.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Card 1 (Top Left): Flies in from far left with -15deg tilt */}
+            <motion.div
+              variants={advantageVariants.topLeft}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-emerald-400 dark:hover:border-emerald-500/50 transition-colors flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-lg shadow-emerald-500/10">
+                    <Coins className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 uppercase tracking-wider">
+                    Zero Rounding Loss
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Exact Integer Paise Math
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Standard finance apps use IEEE 754 floating-point numbers, creating ₹1 remainder anomalies when splitting bills 3 ways. GroupFund stores every rupee strictly in integer paise, guaranteeing zero lost funds down to the cent.
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="font-mono font-semibold text-emerald-600 dark:text-emerald-400">0.00% Floating Drift</span>
+                <span>Audit-Verified Ledger</span>
+              </div>
+            </motion.div>
+
+            {/* Card 2 (Top Right): Flies in from far right with +15deg tilt */}
+            <motion.div
+              variants={advantageVariants.topRight}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-indigo-400 dark:hover:border-indigo-500/50 transition-colors flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-lg shadow-indigo-500/10">
+                    <Bot className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 uppercase tracking-wider">
+                    Multimodal Vision
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Gemini 2.5 Multimodal Intelligence
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Snap photo of any crumpled dinner receipt, electronics BOM invoice, or trip ticket. Google Gemini 2.5 Flash extracts line items, verifies tax rates, and drafts full grant proposals automatically without tedious typing.
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="font-mono font-semibold text-indigo-600 dark:text-indigo-400">Sub-Second OCR</span>
+                <span>Automated Itemization</span>
+              </div>
+            </motion.div>
+
+            {/* Card 3 (Bottom Left): Drops down from the top with -10deg tilt */}
+            <motion.div
+              variants={advantageVariants.bottomLeft}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500/20 to-sky-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-lg shadow-blue-500/10">
+                    <Split className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 uppercase tracking-wider">
+                    Graph Simplification
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Min-Cash-Flow Net Debt Resolution
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Instead of 12 messy back-and-forth payments between friends, our greedy graph algorithm calculates net consumption shares and reduces them to the absolute minimum transfers needed to zero everyone out.
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">O(V log V) Graph Solver</span>
+                <span>Minimal Friction</span>
+              </div>
+            </motion.div>
+
+            {/* Card 4 (Bottom Right): Flies up from bottom with +10deg tilt */}
+            <motion.div
+              variants={advantageVariants.bottomRight}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-lg shadow-amber-500/10">
+                    <ShieldCheck className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 uppercase tracking-wider">
+                    PayPal REST Orders v2
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                  Server-Verified PayPal Crowdfunding
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Support innovative student hardware projects worldwide. Every contribution uses server-side order creation and webhook verification, bridging international USD backers to Indian INR student innovators seamlessly.
+                </p>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                <span className="font-mono font-semibold text-amber-600 dark:text-amber-400">USD/INR Bridge ($1.20 = ₹100)</span>
+                <span>Milestone-Locked Payouts</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Discover Innovation Projects */}
       <motion.section
         id="projects"
         initial={{ opacity: 0, y: 50 }}
