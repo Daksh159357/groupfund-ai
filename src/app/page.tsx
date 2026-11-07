@@ -18,24 +18,19 @@ import {
   Bot,
   ShieldCheck,
   CheckCircle2,
-  TrendingUp,
   Cpu,
   ChevronDown,
-  Layers,
-  HeartHandshake,
   ExternalLink,
-  Users,
-  Wallet,
-  Play,
   Coins,
-  ArrowUpRight,
   Send,
-  MessageSquare,
   Check,
-  Zap,
 } from 'lucide-react';
 import { formatPaise } from '@/lib/financial';
 import { INITIAL_PROJECTS } from '@/lib/store';
+import { ScrollAssemble } from '@/components/ScrollAssemble';
+
+// Mode toggle: simple (scroll-scrubbed cards in natural flow, default) vs pinned (sticky scroll container)
+export const PINNED_ASSEMBLE_MODE = false;
 
 // Typewriter text generator for realistic conversational AI demo
 function TypewriterText({ text, delay = 0, speed = 28 }: { text: string; delay?: number; speed?: number }) {
@@ -94,26 +89,6 @@ function CountUpNumber({ end, duration = 1.2 }: { end: number; duration?: number
   );
 }
 
-// 4-Directional Flying Scroll Variants for The GroupFund Advantage
-const advantageVariants = {
-  topLeft: {
-    initial: { opacity: 0, x: -600, rotate: -15 },
-    animate: { opacity: 1, x: 0, rotate: 0 },
-  },
-  topRight: {
-    initial: { opacity: 0, x: 600, rotate: 15 },
-    animate: { opacity: 1, x: 0, rotate: 0 },
-  },
-  bottomLeft: {
-    initial: { opacity: 0, y: -600, rotate: -10 },
-    animate: { opacity: 1, y: 0, rotate: 0 },
-  },
-  bottomRight: {
-    initial: { opacity: 0, y: 600, rotate: 10 },
-    animate: { opacity: 1, y: 0, rotate: 0 },
-  },
-};
-
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -136,10 +111,6 @@ export default function LandingPage() {
     offset: ['start end', 'center center'],
   });
 
-  const billY = useTransform(splitProgress, [0, 0.7], [20, -30]);
-  const billOpacity = useTransform(splitProgress, [0, 0.4, 0.85], [1, 1, 1]); // Crisp, bold 1.0 opacity
-  const membersY = useTransform(splitProgress, [0.25, 0.75], [50, 0]);
-  const membersOpacity = useTransform(splitProgress, [0.25, 0.6], [0, 1]);
   const pathProgress = useTransform(splitProgress, [0.25, 0.75], [0, 1]);
 
   // Footer Orb Expansion Tracking
@@ -179,7 +150,7 @@ export default function LandingPage() {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white relative overflow-x-hidden"
+      className="min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white relative overflow-x-clip"
     >
       {/* Dynamic Mouse-Following Radial Gradient */}
       <motion.div
@@ -346,159 +317,152 @@ export default function LandingPage() {
       </section>
 
       {/* 2. Unified Financial Architecture Showcase: "The Intelligence Behind Your Money" */}
-      <section className="py-20 sm:py-28 px-4 sm:px-8 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-t border-slate-200 dark:border-slate-800/80 relative overflow-hidden">
+      <section className="py-20 sm:py-28 px-4 sm:px-8 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-t border-slate-200 dark:border-slate-800/80 relative overflow-x-clip">
         {/* Subtle Ambient Radial Glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-indigo-500/5 to-transparent dark:from-blue-600/15 dark:via-indigo-600/10 dark:to-transparent pointer-events-none" />
 
         <div className="max-w-6xl mx-auto space-y-12 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6 }}
-            className="text-center space-y-3 max-w-2xl mx-auto"
-          >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Unified Financial Intelligence</span>
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              The Intelligence Behind Your Money
-            </h2>
-            <p className="text-xs sm:text-base text-slate-600 dark:text-slate-400">
-              Real-time ledger tracking group balances, trip settlements, and student innovation backing with zero IEEE-754 rounding loss.
-            </p>
-          </motion.div>
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <ScrollAssemble from="left" distance={180} offset={['start 95%', 'start 65%']}>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-sm">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Unified Financial Intelligence</span>
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
+                The Intelligence Behind Your Money
+              </h2>
+            </ScrollAssemble>
+            <ScrollAssemble from="right" distance={180} offset={['start 92%', 'start 62%']}>
+              <p className="text-xs sm:text-base text-slate-600 dark:text-slate-400">
+                Real-time ledger tracking group balances, trip settlements, and student innovation backing with zero IEEE-754 rounding loss.
+              </p>
+            </ScrollAssemble>
+          </div>
 
           {/* Side-by-Side Dual Showcase */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left: 3D Dashboard Mockup (7 cols) */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6 }}
-              className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 p-5 sm:p-7 shadow-2xl shadow-blue-500/10 backdrop-blur-xl space-y-5"
-            >
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-rose-500" />
-                  <div className="w-3 h-3 rounded-full bg-amber-500" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                  <span className="text-xs text-slate-600 dark:text-slate-400 ml-2 font-mono">groupfund-ai.onrender.com/dashboard</span>
+            <ScrollAssemble from="left" distance={220} rotate={-4} offset={['start 90%', 'start 55%']} className="lg:col-span-7">
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 p-5 sm:p-7 shadow-2xl shadow-blue-500/10 backdrop-blur-xl space-y-5">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-rose-500" />
+                    <div className="w-3 h-3 rounded-full bg-amber-500" />
+                    <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                    <span className="text-xs text-slate-600 dark:text-slate-400 ml-2 font-mono">groupfund-ai.onrender.com/dashboard</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Active Ledger
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Active Ledger
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
-                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Total Group Balance</span>
-                  <p className="text-xl font-bold text-slate-900 dark:text-white font-mono">+₹10,000</p>
-                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Receivable from Goa Trip</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Total Group Balance</span>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white font-mono">+₹10,000</p>
+                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Receivable from Goa Trip</p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Active Groups</span>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">Goa 2026 &bull; Robolab</p>
+                    <p className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">Min-Cash-Flow Active</p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Innovation Prototype</span>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">AgriBot Precision Rover</p>
+                    <p className="text-[10px] text-purple-600 dark:text-purple-400 font-medium">PayPal Verified &bull; 70%</p>
+                  </div>
                 </div>
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
-                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Active Groups</span>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white truncate">Goa 2026 &bull; Robolab</p>
-                  <p className="text-[10px] text-blue-600 dark:text-blue-400 font-medium">Min-Cash-Flow Active</p>
-                </div>
-                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
-                  <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Innovation Prototype</span>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white truncate">AgriBot Precision Rover</p>
-                  <p className="text-[10px] text-purple-600 dark:text-purple-400 font-medium">PayPal Verified &bull; 70%</p>
-                </div>
-              </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                <span className="text-slate-600 dark:text-slate-400 font-medium">Live Settlement Ledger:</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" />
-                  0 Floating Errors (Exact Integer Paise Math)
-                </span>
+                <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">Live Settlement Ledger:</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" />
+                    0 Floating Errors (Exact Integer Paise Math)
+                  </span>
+                </div>
               </div>
-            </motion.div>
+            </ScrollAssemble>
 
             {/* Right: Autonomous Copilot Card (5 cols) */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6 }}
-              className="lg:col-span-5 rounded-3xl border border-indigo-200 dark:border-indigo-500/40 bg-white/95 dark:bg-slate-900/95 p-6 shadow-2xl shadow-indigo-500/15 backdrop-blur-2xl space-y-4"
-            >
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
-                  <Bot className="w-5 h-5 animate-pulse" />
-                  <span className="font-bold text-sm text-slate-900 dark:text-white">Gemini Financial Assistant</span>
+            <ScrollAssemble from="right" distance={220} rotate={4} offset={['start 88%', 'start 52%']} className="lg:col-span-5">
+              <div className="rounded-3xl border border-indigo-200 dark:border-indigo-500/40 bg-white/95 dark:bg-slate-900/95 p-6 shadow-2xl shadow-indigo-500/15 backdrop-blur-2xl space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                    <Bot className="w-5 h-5 animate-pulse" />
+                    <span className="font-bold text-sm text-slate-900 dark:text-white">Gemini Financial Assistant</span>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-mono font-semibold">
+                    Online
+                  </span>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-mono font-semibold">
-                  Online
-                </span>
-              </div>
 
-              <div className="space-y-3 text-xs">
-                <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 shadow-sm">
-                  &ldquo;Scan dinner bill of ₹3,000 for Candolim Villa and split 3 ways.&rdquo;
+                <div className="space-y-3 text-xs">
+                  <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 shadow-sm">
+                    &ldquo;Scan dinner bill of ₹3,000 for Candolim Villa and split 3 ways.&rdquo;
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 text-indigo-900 dark:text-indigo-200 shadow-sm space-y-1">
+                    <p className="font-semibold">
+                      &ldquo;Done! Split ₹1,000 each to Daksh, Rahul, and Jay. Min-Cash-Flow plan updated with 1 transfer.&rdquo;
+                    </p>
+                    <p className="text-[10px] text-indigo-700/80 dark:text-indigo-300/80 pt-1 border-t border-indigo-200/60 dark:border-indigo-500/20">
+                      &bull; 0 Paise rounding loss &bull; Audit log synced
+                    </p>
+                  </div>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 text-indigo-900 dark:text-indigo-200 shadow-sm space-y-1">
-                  <p className="font-semibold">
-                    &ldquo;Done! Split ₹1,000 each to Daksh, Rahul, and Jay. Min-Cash-Flow plan updated with 1 transfer.&rdquo;
-                  </p>
-                  <p className="text-[10px] text-indigo-700/80 dark:text-indigo-300/80 pt-1 border-t border-indigo-200/60 dark:border-indigo-500/20">
-                    &bull; 0 Paise rounding loss &bull; Audit log synced
-                  </p>
-                </div>
-              </div>
 
-              <div className="pt-2 flex items-center justify-between">
-                <Link
-                  href="/dashboard"
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/25 transition-all active:scale-[0.98]"
-                >
-                  <span>Launch Live Dashboard</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+                <div className="pt-2 flex items-center justify-between">
+                  <Link
+                    href="/dashboard"
+                    className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/25 transition-all active:scale-[0.98]"
+                  >
+                    <span>Launch Live Dashboard</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
-            </motion.div>
+            </ScrollAssemble>
           </div>
         </div>
       </section>
 
       {/* 3. Scroll-Triggered Expense Splitting (The Core Visual) */}
-      <section ref={splitRef} className="py-28 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/40 relative overflow-hidden">
+      <section ref={splitRef} className="py-28 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/40 relative overflow-x-clip">
         <div className="max-w-5xl mx-auto space-y-12 text-center">
           <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-              Interactive Mathematics
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
-              Splitting bills has never been this beautiful.
-            </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-              Watch an unorganized ₹3,000 restaurant bill split cleanly across members with zero friction.
-            </p>
+            <ScrollAssemble from="left" distance={180} offset={['start 95%', 'start 65%']}>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Interactive Mathematics
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white mt-1">
+                Splitting bills has never been this beautiful.
+              </h2>
+            </ScrollAssemble>
+            <ScrollAssemble from="right" distance={180} offset={['start 92%', 'start 62%']}>
+              <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+                Watch an unorganized ₹3,000 restaurant bill split cleanly across members with zero friction.
+              </p>
+            </ScrollAssemble>
           </div>
 
           <div className="relative pt-6 pb-12 flex flex-col items-center">
             {/* Single Glowing Center Bill Card */}
-            <motion.div
-              style={{ y: billY, opacity: billOpacity }}
-              className="w-72 sm:w-80 rounded-3xl border border-blue-200 dark:border-blue-500/40 bg-white dark:bg-slate-900 p-5 shadow-2xl shadow-blue-500/10 text-left space-y-2 z-20"
-            >
-              <div className="flex items-center justify-between text-xs text-blue-600 dark:text-blue-400">
-                <span className="font-semibold">Candolim Shack Dinner</span>
-                <Receipt className="w-4 h-4" />
+            <ScrollAssemble from="bottom" distance={120} offset={['start 90%', 'start 55%']} className="z-20">
+              <div className="w-72 sm:w-80 rounded-3xl border border-blue-200 dark:border-blue-500/40 bg-white dark:bg-slate-900 p-5 shadow-2xl shadow-blue-500/10 text-left space-y-2">
+                <div className="flex items-center justify-between text-xs text-blue-600 dark:text-blue-400">
+                  <span className="font-semibold">Candolim Shack Dinner</span>
+                  <Receipt className="w-4 h-4" />
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
+                  ₹3,000.00
+                </div>
+                <div className="text-[11px] text-slate-600 dark:text-slate-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800">
+                  <span>Paid by Daksh</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-medium">Receipt OCR Verified</span>
+                </div>
               </div>
-              <div className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
-                ₹3,000.00
-              </div>
-              <div className="text-[11px] text-slate-600 dark:text-slate-400 flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800">
-                <span>Paid by Daksh</span>
-                <span className="text-emerald-600 dark:text-emerald-400 font-medium">Receipt OCR Verified</span>
-              </div>
-            </motion.div>
+            </ScrollAssemble>
 
             {/* SVG Dynamic Connecting Lines */}
             <div className="w-full max-w-md h-20 my-2 hidden md:block">
@@ -531,527 +495,538 @@ export default function LandingPage() {
             </div>
 
             {/* 3 Member Cards Fading & Counting In */}
-            <motion.div
-              style={{ y: membersY, opacity: membersOpacity }}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl mt-4 z-10"
-            >
-              <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/40 text-left space-y-1">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold">
-                    D
-                  </div>
-                  <span className="text-xs font-bold text-slate-900 dark:text-slate-200">Daksh Sharma</span>
-                </div>
-                <div className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-1">
-                  <CountUpNumber end={1000} />
-                </div>
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">Personal Share</span>
-              </div>
-
-              <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/40 text-left space-y-1">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[10px] font-bold">
-                    R
-                  </div>
-                  <span className="text-xs font-bold text-slate-900 dark:text-slate-200">Rahul Verma</span>
-                </div>
-                <div className="text-xl font-extrabold text-amber-600 dark:text-amber-400 font-mono mt-1">
-                  <CountUpNumber end={1000} />
-                </div>
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">Owes Daksh</span>
-              </div>
-
-              <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/40 text-left space-y-1">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-white text-[10px] font-bold">
-                    J
-                  </div>
-                  <span className="text-xs font-bold text-slate-900 dark:text-slate-200">Jay Patel</span>
-                </div>
-                <div className="text-xl font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-1">
-                  <CountUpNumber end={1000} />
-                </div>
-                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">Owes Daksh</span>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. AI Intelligence Animation: "Meet your AI Financial Copilot" */}
-      <section id="ai" className="py-24 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950">
-        <div className="max-w-6xl mx-auto space-y-14">
-          <div className="text-center space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-              Intelligence Layer
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">
-              Meet your AI Financial Copilot.
-            </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-              Powered by Google Gemini 2.5 Flash for natural multimodal bill extraction and automated project proposals.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Left: Glowing Chat Interface with Typewriter Effect */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6 }}
-              className="rounded-3xl border border-indigo-200 dark:border-indigo-500/30 bg-slate-50 dark:bg-slate-900/90 p-5 sm:p-6 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl space-y-4"
-            >
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
-                <div className="flex items-center gap-2.5">
-                  <div className="relative">
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg">
-                      <Bot className="w-4 h-4" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl mt-4 z-10">
+              <ScrollAssemble from="left" distance={180} rotate={-4} offset={['start 88%', 'start 52%']}>
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/40 text-left space-y-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold">
+                      D
                     </div>
-                    <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-slate-900 animate-pulse" />
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-200">Daksh Sharma</span>
                   </div>
-                  <div>
-                    <p className="text-xs font-bold text-slate-900 dark:text-white">Gemini 2.5 Assistant</p>
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400">Multimodal OCR & Debt Planner</p>
+                  <div className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-1">
+                    <CountUpNumber end={1000} />
                   </div>
+                  <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">Personal Share</span>
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-mono font-semibold">
-                  Online
-                </span>
-              </div>
+              </ScrollAssemble>
 
-              {/* Chat Thread */}
-              <div className="space-y-3 py-2">
-                {/* User Bubble */}
-                <div className="flex justify-end">
-                  <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-blue-600 px-4 py-2.5 text-xs text-white shadow-md">
-                    <TypewriterText text="Scan this receipt and split it between 5 people." delay={300} speed={25} />
-                  </div>
-                </div>
-
-                {/* Gemini AI Bubble */}
-                <div className="flex justify-start items-start gap-2 pt-1">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-600/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-950/40 px-4 py-2.5 text-xs text-indigo-900 dark:text-indigo-100 shadow-md space-y-1.5">
-                    <p className="font-semibold text-indigo-950 dark:text-indigo-300">
-                      <TypewriterText
-                        text="Done! Extracted 4 items totaling ₹2,500. Everyone owes exactly ₹500."
-                        delay={1600}
-                        speed={25}
-                      />
-                    </p>
-                    <div className="text-[10px] text-indigo-700/80 dark:text-indigo-300/80 pt-1 border-t border-indigo-200 dark:border-indigo-500/20 flex items-center gap-1 font-medium">
-                      <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                      <span>Zero remainder rounding errors. Added to College Trip ledger.</span>
+              <ScrollAssemble from="bottom" distance={120} offset={['start 85%', 'start 50%']}>
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/40 text-left space-y-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[10px] font-bold">
+                      R
                     </div>
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-200">Rahul Verma</span>
                   </div>
+                  <div className="text-xl font-extrabold text-amber-600 dark:text-amber-400 font-mono mt-1">
+                    <CountUpNumber end={1000} />
+                  </div>
+                  <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">Owes Daksh</span>
                 </div>
-              </div>
+              </ScrollAssemble>
 
-              {/* Fake Input Box */}
-              <div className="pt-2">
-                <div className="flex items-center gap-2 p-2 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm">
-                  <input
-                    type="text"
-                    disabled
-                    placeholder="Ask Gemini to analyze debts or draft proposal..."
-                    className="w-full bg-transparent text-xs text-slate-600 dark:text-slate-400 px-2 outline-none"
-                  />
-                  <button className="p-2 rounded-xl bg-blue-600 text-white shrink-0">
-                    <Send className="w-3.5 h-3.5" />
-                  </button>
+              <ScrollAssemble from="right" distance={180} rotate={4} offset={['start 82%', 'start 48%']}>
+                <div className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl shadow-slate-200/50 dark:shadow-black/40 text-left space-y-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-white text-[10px] font-bold">
+                      J
+                    </div>
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-200">Jay Patel</span>
+                  </div>
+                  <div className="text-xl font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-1">
+                    <CountUpNumber end={1000} />
+                  </div>
+                  <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block">Owes Daksh</span>
                 </div>
-              </div>
-            </motion.div>
-
-            {/* Right: AI Capability Pillars */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <motion.div
-                whileHover={{ scale: 1.04, rotateY: 4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-blue-400 transition-colors"
-              >
-                <Bot className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                <h3 className="font-bold text-sm text-slate-900 dark:text-white">Unified Assistant</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Ask &ldquo;Who owes me money?&rdquo; or &ldquo;How much did I spend in Goa?&rdquo; anytime.
-                </p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.04, rotateY: 4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-indigo-400 transition-colors"
-              >
-                <Receipt className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                <h3 className="font-bold text-sm text-slate-900 dark:text-white">Multimodal Receipt OCR</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Accepts camera photos of invoices and extracts line items, subtotal, and taxes.
-                </p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.04, rotateY: 4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-amber-400 transition-colors"
-              >
-                <Lightbulb className="w-6 h-6 text-amber-600 dark:text-amber-400" />
-                <h3 className="font-bold text-sm text-slate-900 dark:text-white">Proposal Drafter</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Converts rough robotics hardware concepts into BOM budgets and milestone schedules.
-                </p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.04, rotateY: 4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-emerald-400 transition-colors"
-              >
-                <Cpu className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                <h3 className="font-bold text-sm text-slate-900 dark:text-white">Milestone Verification</h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Audits sensor logs, test documents, and photos to score milestone completion.
-                </p>
-              </motion.div>
+              </ScrollAssemble>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. The GroupFund Advantage: 4-Directional Flying Scroll Animation */}
-      <section id="advantage" className="relative w-full overflow-hidden py-24 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950">
+      {/* 4. AI Intelligence Animation: "Meet your AI Financial Copilot" */}
+      <section id="ai" className="py-24 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950 relative overflow-x-clip">
+        <div className="max-w-6xl mx-auto space-y-14">
+          <div className="text-center space-y-3">
+            <ScrollAssemble from="left" distance={180} offset={['start 95%', 'start 65%']}>
+              <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+                Intelligence Layer
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white mt-1">
+                Meet your AI Financial Copilot.
+              </h2>
+            </ScrollAssemble>
+            <ScrollAssemble from="right" distance={180} offset={['start 92%', 'start 62%']}>
+              <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+                Powered by Google Gemini 2.5 Flash for natural multimodal bill extraction and automated project proposals.
+              </p>
+            </ScrollAssemble>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Left: Glowing Chat Interface with Typewriter Effect */}
+            <ScrollAssemble from="left" distance={220} rotate={-4} offset={['start 90%', 'start 55%']}>
+              <div className="rounded-3xl border border-indigo-200 dark:border-indigo-500/30 bg-slate-50 dark:bg-slate-900/90 p-5 sm:p-6 shadow-2xl shadow-indigo-500/10 backdrop-blur-xl space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+                        <Bot className="w-4 h-4" />
+                      </div>
+                      <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-slate-900 animate-pulse" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-slate-900 dark:text-white">Gemini 2.5 Assistant</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400">Multimodal OCR & Debt Planner</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-mono font-semibold">
+                    Online
+                  </span>
+                </div>
+
+                {/* Chat Thread */}
+                <div className="space-y-3 py-2">
+                  {/* User Bubble */}
+                  <div className="flex justify-end">
+                    <div className="max-w-[85%] rounded-2xl rounded-br-sm bg-blue-600 px-4 py-2.5 text-xs text-white shadow-md">
+                      <TypewriterText text="Scan this receipt and split it between 5 people." delay={300} speed={25} />
+                    </div>
+                  </div>
+
+                  {/* Gemini AI Bubble */}
+                  <div className="flex justify-start items-start gap-2 pt-1">
+                    <div className="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-600/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-950/40 px-4 py-2.5 text-xs text-indigo-900 dark:text-indigo-100 shadow-md space-y-1.5">
+                      <p className="font-semibold text-indigo-950 dark:text-indigo-300">
+                        <TypewriterText
+                          text="Done! Extracted 4 items totaling ₹2,500. Everyone owes exactly ₹500."
+                          delay={1600}
+                          speed={25}
+                        />
+                      </p>
+                      <div className="text-[10px] text-indigo-700/80 dark:text-indigo-300/80 pt-1 border-t border-indigo-200 dark:border-indigo-500/20 flex items-center gap-1 font-medium">
+                        <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <span>Zero remainder rounding errors. Added to College Trip ledger.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Fake Input Box */}
+                <div className="pt-2">
+                  <div className="flex items-center gap-2 p-2 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="Ask Gemini to analyze debts or draft proposal..."
+                      className="w-full bg-transparent text-xs text-slate-600 dark:text-slate-400 px-2 outline-none"
+                    />
+                    <button className="p-2 rounded-xl bg-blue-600 text-white shrink-0">
+                      <Send className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ScrollAssemble>
+
+            {/* Right: AI Capability Pillars */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <ScrollAssemble from="left" distance={160} rotate={-4} offset={['start 88%', 'start 54%']}>
+                <motion.div
+                  whileHover={{ scale: 1.04, rotateY: 4 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-blue-400 transition-colors"
+                >
+                  <Bot className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white">Unified Assistant</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Ask &ldquo;Who owes me money?&rdquo; or &ldquo;How much did I spend in Goa?&rdquo; anytime.
+                  </p>
+                </motion.div>
+              </ScrollAssemble>
+
+              <ScrollAssemble from="right" distance={160} rotate={4} offset={['start 86%', 'start 52%']}>
+                <motion.div
+                  whileHover={{ scale: 1.04, rotateY: 4 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-indigo-400 transition-colors"
+                >
+                  <Receipt className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white">Multimodal Receipt OCR</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Accepts camera photos of invoices and extracts line items, subtotal, and taxes.
+                  </p>
+                </motion.div>
+              </ScrollAssemble>
+
+              <ScrollAssemble from="left" distance={160} rotate={-4} offset={['start 84%', 'start 50%']}>
+                <motion.div
+                  whileHover={{ scale: 1.04, rotateY: 4 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-amber-400 transition-colors"
+                >
+                  <Lightbulb className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white">Proposal Drafter</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Converts rough robotics hardware concepts into BOM budgets and milestone schedules.
+                  </p>
+                </motion.div>
+              </ScrollAssemble>
+
+              <ScrollAssemble from="right" distance={160} rotate={4} offset={['start 82%', 'start 48%']}>
+                <motion.div
+                  whileHover={{ scale: 1.04, rotateY: 4 }}
+                  transition={{ type: 'spring', stiffness: 300 }}
+                  className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-3 cursor-pointer shadow-sm hover:border-emerald-400 transition-colors"
+                >
+                  <Cpu className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                  <h3 className="font-bold text-sm text-slate-900 dark:text-white">Milestone Verification</h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Audits sensor logs, test documents, and photos to score milestone completion.
+                  </p>
+                </motion.div>
+              </ScrollAssemble>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. The GroupFund Advantage: Scroll-Scrubbed Assemble Animation */}
+      <section id="advantage" className="relative w-full overflow-x-clip py-24 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950">
         {/* Subtle Ambient Radial Lighting */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-indigo-500/5 to-transparent pointer-events-none" />
 
         <div className="max-w-5xl mx-auto px-4 space-y-14 relative z-10">
           <div className="text-center space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>The GroupFund Advantage</span>
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Built Different for Real Campus Life.
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-              Why student engineering teams, roommates, and innovators choose our unified AI ledger over disconnected spreadsheets and payment apps.
-            </p>
+            <ScrollAssemble from="left" distance={200} offset={['start 95%', 'start 65%']}>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-sm">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>The GroupFund Advantage</span>
+              </span>
+              <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
+                Built Different for Real Campus Life.
+              </h2>
+            </ScrollAssemble>
+            <ScrollAssemble from="right" distance={200} offset={['start 92%', 'start 62%']}>
+              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Why student engineering teams, roommates, and innovators choose our unified AI ledger over disconnected spreadsheets and payment apps.
+              </p>
+            </ScrollAssemble>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Card 1 (Top Left): Flies in from far left with -15deg tilt */}
-            <motion.div
-              variants={advantageVariants.topLeft}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
-              whileHover={{ y: -6, scale: 1.02 }}
-              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-emerald-400 dark:hover:border-emerald-500/50 transition-colors flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-lg shadow-emerald-500/10">
-                    <Coins className="w-6 h-6" />
+            {/* Card 1 (Top Left): Flies in from far left with -6deg tilt */}
+            <ScrollAssemble from="left" distance={240} rotate={-6} offset={['start 90%', 'start 55%']}>
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-emerald-400 dark:hover:border-emerald-500/50 transition-colors flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-lg shadow-emerald-500/10">
+                      <Coins className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 uppercase tracking-wider">
+                      Zero Rounding Loss
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 uppercase tracking-wider">
-                    Zero Rounding Loss
-                  </span>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    Exact Integer Paise Math
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Standard finance apps use IEEE 754 floating-point numbers, creating ₹1 remainder anomalies when splitting bills 3 ways. GroupFund stores every rupee strictly in integer paise, guaranteeing zero lost funds down to the cent.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                  Exact Integer Paise Math
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Standard finance apps use IEEE 754 floating-point numbers, creating ₹1 remainder anomalies when splitting bills 3 ways. GroupFund stores every rupee strictly in integer paise, guaranteeing zero lost funds down to the cent.
-                </p>
-              </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                <span className="font-mono font-semibold text-emerald-600 dark:text-emerald-400">0.00% Floating Drift</span>
-                <span>Audit-Verified Ledger</span>
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                  <span className="font-mono font-semibold text-emerald-600 dark:text-emerald-400">0.00% Floating Drift</span>
+                  <span>Audit-Verified Ledger</span>
+                </div>
               </div>
-            </motion.div>
+            </ScrollAssemble>
 
-            {/* Card 2 (Top Right): Flies in from far right with +15deg tilt */}
-            <motion.div
-              variants={advantageVariants.topRight}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
-              whileHover={{ y: -6, scale: 1.02 }}
-              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-indigo-400 dark:hover:border-indigo-500/50 transition-colors flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-lg shadow-indigo-500/10">
-                    <Bot className="w-6 h-6" />
+            {/* Card 2 (Top Right): Flies in from far right with +6deg tilt */}
+            <ScrollAssemble from="right" distance={240} rotate={6} offset={['start 88%', 'start 52%']}>
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-indigo-400 dark:hover:border-indigo-500/50 transition-colors flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-lg shadow-indigo-500/10">
+                      <Bot className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 uppercase tracking-wider">
+                      Multimodal Vision
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20 uppercase tracking-wider">
-                    Multimodal Vision
-                  </span>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    Gemini 2.5 Multimodal Intelligence
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Snap photo of any crumpled dinner receipt, electronics BOM invoice, or trip ticket. Google Gemini 2.5 Flash extracts line items, verifies tax rates, and drafts full grant proposals automatically without tedious typing.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                  Gemini 2.5 Multimodal Intelligence
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Snap photo of any crumpled dinner receipt, electronics BOM invoice, or trip ticket. Google Gemini 2.5 Flash extracts line items, verifies tax rates, and drafts full grant proposals automatically without tedious typing.
-                </p>
-              </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                <span className="font-mono font-semibold text-indigo-600 dark:text-indigo-400">Sub-Second OCR</span>
-                <span>Automated Itemization</span>
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                  <span className="font-mono font-semibold text-indigo-600 dark:text-indigo-400">Sub-Second OCR</span>
+                  <span>Automated Itemization</span>
+                </div>
               </div>
-            </motion.div>
+            </ScrollAssemble>
 
-            {/* Card 3 (Bottom Left): Drops down from the top with -10deg tilt */}
-            <motion.div
-              variants={advantageVariants.bottomLeft}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
-              whileHover={{ y: -6, scale: 1.02 }}
-              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500/20 to-sky-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-lg shadow-blue-500/10">
-                    <Split className="w-6 h-6" />
+            {/* Card 3 (Bottom Left): Drops down from left with -6deg tilt */}
+            <ScrollAssemble from="left" distance={240} rotate={-6} offset={['start 85%', 'start 50%']}>
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500/20 to-sky-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shadow-lg shadow-blue-500/10">
+                      <Split className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 uppercase tracking-wider">
+                      Graph Simplification
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20 uppercase tracking-wider">
-                    Graph Simplification
-                  </span>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    Min-Cash-Flow Net Debt Resolution
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Instead of 12 messy back-and-forth payments between friends, our greedy graph algorithm calculates net consumption shares and reduces them to the absolute minimum transfers needed to zero everyone out.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                  Min-Cash-Flow Net Debt Resolution
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Instead of 12 messy back-and-forth payments between friends, our greedy graph algorithm calculates net consumption shares and reduces them to the absolute minimum transfers needed to zero everyone out.
-                </p>
-              </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">O(V log V) Graph Solver</span>
-                <span>Minimal Friction</span>
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                  <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">O(V log V) Graph Solver</span>
+                  <span>Minimal Friction</span>
+                </div>
               </div>
-            </motion.div>
+            </ScrollAssemble>
 
-            {/* Card 4 (Bottom Right): Flies up from bottom with +10deg tilt */}
-            <motion.div
-              variants={advantageVariants.bottomRight}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
-              whileHover={{ y: -6, scale: 1.02 }}
-              className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors flex flex-col justify-between"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-lg shadow-amber-500/10">
-                    <ShieldCheck className="w-6 h-6" />
+            {/* Card 4 (Bottom Right): Flies in from right with +6deg tilt */}
+            <ScrollAssemble from="right" distance={240} rotate={6} offset={['start 82%', 'start 46%']}>
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors flex flex-col justify-between h-full">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-lg shadow-amber-500/10">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 uppercase tracking-wider">
+                      PayPal REST Orders v2
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 uppercase tracking-wider">
-                    PayPal REST Orders v2
-                  </span>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                    Server-Verified PayPal Crowdfunding
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Support innovative student hardware projects worldwide. Every contribution uses server-side order creation and webhook verification, bridging international USD backers to Indian INR student innovators seamlessly.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-                  Server-Verified PayPal Crowdfunding
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Support innovative student hardware projects worldwide. Every contribution uses server-side order creation and webhook verification, bridging international USD backers to Indian INR student innovators seamlessly.
-                </p>
-              </div>
 
-              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                <span className="font-mono font-semibold text-amber-600 dark:text-amber-400">USD/INR Bridge ($1.20 = ₹100)</span>
-                <span>Milestone-Locked Payouts</span>
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                  <span className="font-mono font-semibold text-amber-600 dark:text-amber-400">USD/INR Bridge ($1.20 = ₹100)</span>
+                  <span>Milestone-Locked Payouts</span>
+                </div>
               </div>
-            </motion.div>
+            </ScrollAssemble>
           </div>
         </div>
       </section>
 
       {/* 6. Discover Innovation Projects */}
-      <motion.section
+      <section
         id="projects"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.6 }}
-        className="py-20 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30"
+        className="py-20 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30 relative overflow-x-clip"
       >
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
-            <div>
+            <ScrollAssemble from="left" distance={180} offset={['start 95%', 'start 65%']}>
               <span className="text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">
                 Module B &bull; Innovation Crowdfunding
               </span>
               <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mt-1">
                 Featured Engineering & Robotics Innovations
               </h2>
-            </div>
-            <Link
-              href="/discover"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500"
-            >
-              <span>Explore all projects</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </Link>
+            </ScrollAssemble>
+            <ScrollAssemble from="right" distance={180} offset={['start 92%', 'start 62%']}>
+              <Link
+                href="/discover"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500"
+              >
+                <span>Explore all projects</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </Link>
+            </ScrollAssemble>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {INITIAL_PROJECTS.map((proj) => {
+            {INITIAL_PROJECTS.map((proj, idx) => {
               const progressPct = Math.min(100, Math.round((proj.raisedAmountPaise / proj.targetAmountPaise) * 100));
+              const cardFrom = idx === 0 ? 'left' : idx === 1 ? 'bottom' : 'right';
+              const cardRotate = idx === 0 ? -4 : idx === 1 ? 0 : 4;
+              const cardOffset =
+                idx === 0 ? ['start 90%', 'start 55%'] : idx === 1 ? ['start 86%', 'start 52%'] : ['start 82%', 'start 48%'];
+
               return (
-                <div
+                <ScrollAssemble
                   key={proj.id}
-                  className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden flex flex-col justify-between group hover:border-blue-400 dark:hover:border-slate-700 transition-all shadow-md shadow-slate-200/50 dark:shadow-xl dark:shadow-black/20"
+                  from={cardFrom}
+                  distance={idx === 1 ? 160 : 220}
+                  rotate={cardRotate}
+                  offset={cardOffset}
+                  className="h-full"
                 >
-                  <div>
-                    <div className="h-44 relative overflow-hidden bg-slate-100 dark:bg-slate-800">
-                      <img
-                        src={proj.images[0] || '/images/aeroclean.jpg'}
-                        alt={proj.title}
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = '/images/aeroclean.jpg';
-                        }}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-[10px] font-semibold text-white">
-                        {proj.category}
-                      </span>
-                    </div>
+                  <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden flex flex-col justify-between group hover:border-blue-400 dark:hover:border-slate-700 transition-all shadow-md shadow-slate-200/50 dark:shadow-xl dark:shadow-black/20 h-full">
+                    <div>
+                      <div className="h-44 relative overflow-hidden bg-slate-100 dark:bg-slate-800">
+                        <img
+                          src={proj.images[0] || '/images/aeroclean.jpg'}
+                          alt={proj.title}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/images/aeroclean.jpg';
+                          }}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-[10px] font-semibold text-white">
+                          {proj.category}
+                        </span>
+                      </div>
 
-                    <div className="p-5 space-y-3">
-                      <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">{proj.institution}</p>
-                      <h3 className="font-bold text-base text-slate-900 dark:text-white line-clamp-1">{proj.title}</h3>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                        {proj.shortDescription}
-                      </p>
+                      <div className="p-5 space-y-3">
+                        <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium">{proj.institution}</p>
+                        <h3 className="font-bold text-base text-slate-900 dark:text-white line-clamp-1">{proj.title}</h3>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                          {proj.shortDescription}
+                        </p>
 
-                      {/* Progress Bar */}
-                      <div className="space-y-1.5 pt-2">
-                        <div className="flex justify-between text-xs">
-                          <span className="font-semibold text-slate-900 dark:text-white">{formatPaise(proj.raisedAmountPaise)}</span>
-                          <span className="text-slate-500 dark:text-slate-400">{progressPct}% of {formatPaise(proj.targetAmountPaise)}</span>
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all"
-                            style={{ width: `${progressPct}%` }}
-                          />
+                        {/* Progress Bar */}
+                        <div className="space-y-1.5 pt-2">
+                          <div className="flex justify-between text-xs">
+                            <span className="font-semibold text-slate-900 dark:text-white">{formatPaise(proj.raisedAmountPaise)}</span>
+                            <span className="text-slate-500 dark:text-slate-400">{progressPct}% of {formatPaise(proj.targetAmountPaise)}</span>
+                          </div>
+                          <div className="w-full h-2 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all"
+                              style={{ width: `${progressPct}%` }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="p-5 pt-0">
-                    <Link
-                      href={`/projects/${proj.id}`}
-                      className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
-                    >
-                      <span>View Prototype & Back</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                    <div className="p-5 pt-0">
+                      <Link
+                        href={`/projects/${proj.id}`}
+                        className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <span>View Prototype & Back</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                </ScrollAssemble>
               );
             })}
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* 6. PayPal Developer Sandbox Checkout Card */}
-      <motion.section
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.6 }}
-        className="py-20 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80"
-      >
+      <section className="py-20 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 relative overflow-x-clip">
         <div className="max-w-4xl mx-auto rounded-3xl border border-blue-200 dark:border-blue-500/30 bg-white dark:bg-gradient-to-b dark:from-blue-950/20 dark:to-slate-900 shadow-xl shadow-blue-500/5 p-8 sm:p-12 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <ShieldCheck className="w-4 h-4" />
-            <span>PayPal Developer Sandbox Checkout</span>
-          </div>
+          <ScrollAssemble from="left" distance={180} offset={['start 95%', 'start 65%']}>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <ShieldCheck className="w-4 h-4" />
+              <span>PayPal Developer Sandbox Checkout</span>
+            </div>
 
-          <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">
-            Secure, Server-Verified Contributions
-          </h2>
+            <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white mt-3">
+              Secure, Server-Verified Contributions
+            </h2>
+          </ScrollAssemble>
 
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
-            Every contribution creates a PayPal order server-side, captures it with PayPal API credentials, and verifies webhooks before updating project funding progress.
-          </p>
+          <ScrollAssemble from="right" distance={180} offset={['start 92%', 'start 62%']}>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
+              Every contribution creates a PayPal order server-side, captures it with PayPal API credentials, and verifies webhooks before updating project funding progress.
+            </p>
+          </ScrollAssemble>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 text-left">
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shadow-sm">
-              <span className="text-xs font-bold text-blue-600 dark:text-blue-400">Step 1</span>
-              <p className="font-semibold text-xs text-slate-900 dark:text-white mt-1">Select Backing Tier</p>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Pick preset INR amount or custom backing.</p>
-            </div>
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shadow-sm">
-              <span className="text-xs font-bold text-blue-600 dark:text-blue-400">Step 2</span>
-              <p className="font-semibold text-xs text-slate-900 dark:text-white mt-1">PayPal Sandbox</p>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Complete sandbox checkout with test balance.</p>
-            </div>
-            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shadow-sm">
-              <span className="text-xs font-bold text-blue-600 dark:text-blue-400">Step 3</span>
-              <p className="font-semibold text-xs text-slate-900 dark:text-white mt-1">Instant Milestone Fund</p>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Audit log recorded & project gets funded!</p>
-            </div>
+            <ScrollAssemble from="left" distance={180} rotate={-4} offset={['start 88%', 'start 55%']}>
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shadow-sm h-full">
+                <span className="text-xs font-bold text-blue-600 dark:text-blue-400">Step 1</span>
+                <p className="font-semibold text-xs text-slate-900 dark:text-white mt-1">Select Backing Tier</p>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Pick preset INR amount or custom backing.</p>
+              </div>
+            </ScrollAssemble>
+
+            <ScrollAssemble from="bottom" distance={140} offset={['start 85%', 'start 52%']}>
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shadow-sm h-full">
+                <span className="text-xs font-bold text-blue-600 dark:text-blue-400">Step 2</span>
+                <p className="font-semibold text-xs text-slate-900 dark:text-white mt-1">PayPal Sandbox</p>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Complete sandbox checkout with test balance.</p>
+              </div>
+            </ScrollAssemble>
+
+            <ScrollAssemble from="right" distance={180} rotate={4} offset={['start 82%', 'start 48%']}>
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/60 shadow-sm h-full">
+                <span className="text-xs font-bold text-blue-600 dark:text-blue-400">Step 3</span>
+                <p className="font-semibold text-xs text-slate-900 dark:text-white mt-1">Instant Milestone Fund</p>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Audit log recorded & project gets funded!</p>
+              </div>
+            </ScrollAssemble>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* 7. Frequently Asked Questions */}
-      <motion.section
+      <section
         id="faq"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.6 }}
-        className="py-20 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80"
+        className="py-20 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800/80 relative overflow-x-clip"
       >
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="text-center space-y-2">
-            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Frequently Asked Questions</h2>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Everything you need to know about GroupFund AI</p>
+            <ScrollAssemble from="left" distance={180} offset={['start 95%', 'start 65%']}>
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Frequently Asked Questions</h2>
+            </ScrollAssemble>
+            <ScrollAssemble from="right" distance={180} offset={['start 92%', 'start 62%']}>
+              <p className="text-xs text-slate-600 dark:text-slate-400">Everything you need to know about GroupFund AI</p>
+            </ScrollAssemble>
           </div>
 
           <div className="space-y-3">
             {faqs.map((faq, idx) => (
-              <div
+              <ScrollAssemble
                 key={idx}
-                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden shadow-sm"
+                from={idx % 2 === 0 ? 'left' : 'right'}
+                distance={160}
+                rotate={idx % 2 === 0 ? -2 : 2}
+                offset={['start 92%', 'start 60%']}
               >
-                <button
-                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full p-4 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
-                >
-                  <span>{faq.q}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform ${
-                      openFaq === idx ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
-                    }`}
-                  />
-                </button>
-                {openFaq === idx && (
-                  <div className="p-4 pt-0 text-xs text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
+                <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden shadow-sm">
+                  <button
+                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                    className="w-full p-4 text-left flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                  >
+                    <span>{faq.q}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 transition-transform ${
+                        openFaq === idx ? 'rotate-180 text-blue-600 dark:text-blue-400' : ''
+                      }`}
+                    />
+                  </button>
+                  {openFaq === idx && (
+                    <div className="p-4 pt-0 text-xs text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/50">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              </ScrollAssemble>
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* 8. Cinematic Footer Transition with Expanding Glowing Orb */}
-      <section ref={footerRef} className="relative py-28 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 overflow-hidden">
+      <section ref={footerRef} className="relative py-28 px-4 sm:px-8 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 overflow-x-clip">
         {/* Expanding Glowing Orb */}
         <motion.div
           style={{ scale: orbScale, opacity: orbOpacity }}
@@ -1059,38 +1034,38 @@ export default function LandingPage() {
         />
 
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 mx-auto flex items-center justify-center text-white shadow-2xl shadow-blue-500/40"
-          >
-            <Sparkles className="w-8 h-8" />
-          </motion.div>
+          <ScrollAssemble from="left" distance={160} offset={['start 95%', 'start 65%']}>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 mx-auto flex items-center justify-center text-white shadow-2xl shadow-blue-500/40 mb-4">
+              <Sparkles className="w-8 h-8" />
+            </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Ready to organize group money & fund great ideas?
-          </h2>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Ready to organize group money & fund great ideas?
+            </h2>
+          </ScrollAssemble>
 
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-            Join students and innovators managing expenses with mathematical precision and crowdfunding prototypes with PayPal.
-          </p>
+          <ScrollAssemble from="right" distance={160} offset={['start 92%', 'start 62%']}>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+              Join students and innovators managing expenses with mathematical precision and crowdfunding prototypes with PayPal.
+            </p>
+          </ScrollAssemble>
 
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/dashboard"
-              className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-xl shadow-blue-600/30 transition-all active:scale-[0.98]"
-            >
-              Open Live Dashboard
-            </Link>
-            <Link
-              href="/slides"
-              className="px-6 py-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-200 font-semibold text-sm transition-all active:scale-[0.98] shadow-sm"
-            >
-              View In-App Pitch Deck
-            </Link>
-          </div>
+          <ScrollAssemble from="bottom" distance={120} offset={['start 88%', 'start 58%']}>
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/dashboard"
+                className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-xl shadow-blue-600/30 transition-all active:scale-[0.98]"
+              >
+                Open Live Dashboard
+              </Link>
+              <Link
+                href="/slides"
+                className="px-6 py-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-200 font-semibold text-sm transition-all active:scale-[0.98] shadow-sm"
+              >
+                View In-App Pitch Deck
+              </Link>
+            </div>
+          </ScrollAssemble>
         </div>
       </section>
 
