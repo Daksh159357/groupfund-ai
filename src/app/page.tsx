@@ -129,30 +129,6 @@ export default function LandingPage() {
     mouseY.set(e.clientY - rect.top);
   };
 
-  // Sticky 220vh Container Scroll Tracking - Zero blank space, smooth pacing
-  const stickyRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: stickyProgress } = useScroll({
-    target: stickyRef,
-    offset: ['start start', 'end end'],
-  });
-
-  // Sticky Phase 1 (0.0 to 0.3): Scale from 0.88 to 1.0, rotateX 15deg to 0deg (starts visible, zero blank delay)
-  const mockupScale = useTransform(stickyProgress, [0, 0.22], [0.88, 1.0]);
-  const mockupRotateX = useTransform(stickyProgress, [0, 0.22], [15, 0]);
-  const mockupOpacity = useTransform(stickyProgress, [0, 0.65, 0.74], [1, 1, 0]);
-  const phase1Opacity = useTransform(stickyProgress, [0, 0.24, 0.30], [1, 1, 0]);
-
-  // Sticky Phase 2 (0.3 to 0.65): Dashboard slides left, AI chat slides from right
-  const mockupX = useTransform(stickyProgress, [0.28, 0.46], ['0%', '-24%']);
-  const aiChatX = useTransform(stickyProgress, [0.28, 0.46], ['110%', '0%']);
-  const aiChatOpacity = useTransform(stickyProgress, [0.28, 0.36, 0.62, 0.68], [0, 1, 1, 0]);
-  const phase2Opacity = useTransform(stickyProgress, [0.28, 0.34, 0.62, 0.68], [0, 1, 1, 0]);
-
-  // Sticky Phase 3 (0.68 to 1.0): Seamless Logo glow reveal in center
-  const logoScale = useTransform(stickyProgress, [0.68, 0.88], [0.8, 1.05]);
-  const logoOpacity = useTransform(stickyProgress, [0.68, 0.76, 1.0], [0, 1, 1]);
-  const phase3Opacity = useTransform(stickyProgress, [0.68, 0.76, 1.0], [0, 1, 1]);
-
   // Scroll-Triggered Expense Splitting Section Tracking
   const splitRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: splitProgress } = useScroll({
@@ -161,7 +137,7 @@ export default function LandingPage() {
   });
 
   const billY = useTransform(splitProgress, [0, 0.7], [20, -30]);
-  const billOpacity = useTransform(splitProgress, [0, 0.4, 0.85], [1, 1, 0.35]);
+  const billOpacity = useTransform(splitProgress, [0, 0.4, 0.85], [1, 1, 1]); // Crisp, bold 1.0 opacity
   const membersY = useTransform(splitProgress, [0.25, 0.75], [50, 0]);
   const membersOpacity = useTransform(splitProgress, [0.25, 0.6], [0, 1]);
   const pathProgress = useTransform(splitProgress, [0.25, 0.75], [0, 1]);
@@ -369,75 +345,40 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2. Apple-Style Sticky Scroll Container (220vh): "The Intelligence Behind Your Money" */}
-      <section ref={stickyRef} className="relative h-[220vh] bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-t border-slate-200 dark:border-slate-800/80">
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden px-4">
-          {/* Subtle Ambient Radial Glow */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-indigo-500/5 to-transparent dark:from-blue-600/15 dark:via-indigo-600/10 dark:to-transparent pointer-events-none" />
+      {/* 2. Unified Financial Architecture Showcase: "The Intelligence Behind Your Money" */}
+      <section className="py-20 sm:py-28 px-4 sm:px-8 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-t border-slate-200 dark:border-slate-800/80 relative overflow-hidden">
+        {/* Subtle Ambient Radial Glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-indigo-500/5 to-transparent dark:from-blue-600/15 dark:via-indigo-600/10 dark:to-transparent pointer-events-none" />
 
-          {/* Phase 1 Text Overlay */}
+        <div className="max-w-6xl mx-auto space-y-12 relative z-10">
           <motion.div
-            style={{ opacity: phase1Opacity }}
-            className="absolute top-20 sm:top-24 left-0 right-0 text-center z-20 pointer-events-none px-4"
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6 }}
+            className="text-center space-y-3 max-w-2xl mx-auto"
           >
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 border border-blue-500/20 shadow-sm">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Phase 1 &bull; Track Every Rupee</span>
+              <span>Unified Financial Intelligence</span>
             </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               The Intelligence Behind Your Money
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-md mx-auto">
-              Real-time ledger tracking group balances, trip settlements, and student innovation backing.
+            <p className="text-xs sm:text-base text-slate-600 dark:text-slate-400">
+              Real-time ledger tracking group balances, trip settlements, and student innovation backing with zero IEEE-754 rounding loss.
             </p>
           </motion.div>
 
-          {/* Phase 2 Text Overlay */}
-          <motion.div
-            style={{ opacity: phase2Opacity }}
-            className="absolute top-20 sm:top-24 left-0 right-0 text-center z-20 pointer-events-none px-4"
-          >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 dark:bg-indigo-500/20 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 shadow-sm">
-              <Bot className="w-3.5 h-3.5" />
-              <span>Phase 2 &bull; Let AI Do The Math</span>
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2">
-              Autonomous Gemini 2.5 Financial Copilot
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-md mx-auto">
-              Extract line items from crumpled bills, resolve splits, and draft full grant proposals automatically.
-            </p>
-          </motion.div>
-
-          {/* Phase 3 Text Overlay */}
-          <motion.div
-            style={{ opacity: phase3Opacity }}
-            className="absolute top-20 sm:top-24 left-0 right-0 text-center z-20 pointer-events-none px-4"
-          >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-sm">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Phase 3 &bull; Fund The Future</span>
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2">
-              Server-Verified PayPal Sandbox Backing
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-md mx-auto">
-              Instant milestone disbursement, cross-border currency bridging, and zero rounding errors.
-            </p>
-          </motion.div>
-
-          {/* Center Visual Staging Area */}
-          <div className="relative w-full max-w-5xl h-[460px] sm:h-[500px] flex items-center justify-center mt-12 sm:mt-16">
-            {/* 3D Dashboard Mockup */}
+          {/* Side-by-Side Dual Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left: 3D Dashboard Mockup (7 cols) */}
             <motion.div
-              style={{
-                scale: mockupScale,
-                rotateX: mockupRotateX,
-                x: mockupX,
-                opacity: mockupOpacity,
-                perspective: '1200px',
-              }}
-              className="w-full max-w-3xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-5 sm:p-7 shadow-2xl shadow-blue-500/10 backdrop-blur-xl z-10"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-7 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 p-5 sm:p-7 shadow-2xl shadow-blue-500/10 backdrop-blur-xl space-y-5"
             >
               <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-2">
@@ -452,7 +393,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 space-y-1 shadow-sm">
                   <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Total Group Balance</span>
                   <p className="text-xl font-bold text-slate-900 dark:text-white font-mono">+₹10,000</p>
@@ -470,7 +411,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <div className="mt-4 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
                 <span className="text-slate-600 dark:text-slate-400 font-medium">Live Settlement Ledger:</span>
                 <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4" />
@@ -479,51 +420,47 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Glowing AI Chat Box Sliding in from Right in Phase 2 */}
+            {/* Right: Autonomous Copilot Card (5 cols) */}
             <motion.div
-              style={{
-                x: aiChatX,
-                opacity: aiChatOpacity,
-              }}
-              className="absolute right-0 sm:right-4 w-80 sm:w-96 rounded-3xl border border-indigo-200 dark:border-indigo-500/40 bg-white dark:bg-slate-900/95 p-5 shadow-2xl shadow-indigo-500/20 backdrop-blur-2xl z-20 space-y-3"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-5 rounded-3xl border border-indigo-200 dark:border-indigo-500/40 bg-white/95 dark:bg-slate-900/95 p-6 shadow-2xl shadow-indigo-500/15 backdrop-blur-2xl space-y-4"
             >
-              <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 pb-2 border-b border-slate-200 dark:border-slate-800">
-                <Bot className="w-5 h-5 animate-pulse" />
-                <span className="font-bold text-sm text-slate-900 dark:text-white">Gemini Financial Assistant</span>
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400">
+                  <Bot className="w-5 h-5 animate-pulse" />
+                  <span className="font-bold text-sm text-slate-900 dark:text-white">Gemini Financial Assistant</span>
+                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 font-mono font-semibold">
+                  Online
+                </span>
               </div>
-              <div className="space-y-2 text-xs">
-                <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200">
+
+              <div className="space-y-3 text-xs">
+                <div className="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800/80 text-slate-800 dark:text-slate-200 shadow-sm">
                   &ldquo;Scan dinner bill of ₹3,000 for Candolim Villa and split 3 ways.&rdquo;
                 </div>
-                <div className="p-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 text-indigo-900 dark:text-indigo-200">
-                  &ldquo;Done! Split ₹1,000 each to Daksh, Rahul, and Jay. Min-Cash-Flow plan updated with 1 transfer.&rdquo;
+                <div className="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 text-indigo-900 dark:text-indigo-200 shadow-sm space-y-1">
+                  <p className="font-semibold">
+                    &ldquo;Done! Split ₹1,000 each to Daksh, Rahul, and Jay. Min-Cash-Flow plan updated with 1 transfer.&rdquo;
+                  </p>
+                  <p className="text-[10px] text-indigo-700/80 dark:text-indigo-300/80 pt-1 border-t border-indigo-200/60 dark:border-indigo-500/20">
+                    &bull; 0 Paise rounding loss &bull; Audit log synced
+                  </p>
                 </div>
               </div>
-            </motion.div>
 
-            {/* Glowing GroupFund AI Emblem Revealed in Phase 3 */}
-            <motion.div
-              style={{
-                scale: logoScale,
-                opacity: logoOpacity,
-              }}
-              className="absolute inset-0 flex flex-col items-center justify-center z-30 pointer-events-none"
-            >
-              <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-2xl shadow-blue-500/50 border border-white/20">
-                <Sparkles className="w-14 h-14 sm:w-16 sm:h-16" />
+              <div className="pt-2 flex items-center justify-between">
+                <Link
+                  href="/dashboard"
+                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-blue-600/25 transition-all active:scale-[0.98]"
+                >
+                  <span>Launch Live Dashboard</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
-              <h3 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white mt-6 tracking-tight">
-                GroupFund <span className="text-blue-500">AI</span>
-              </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 font-medium">
-                The Single Platform for Campus Finance & Prototype Grants
-              </p>
-              <a
-                href="/dashboard"
-                className="mt-5 px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-lg shadow-blue-600/30 pointer-events-auto transition-transform active:scale-95"
-              >
-                Launch Live Dashboard &rarr;
-              </a>
             </motion.div>
           </div>
         </div>

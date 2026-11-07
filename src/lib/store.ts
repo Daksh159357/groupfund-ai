@@ -624,7 +624,7 @@ export const INITIAL_PROJECTS: InnovationProject[] = [
     institution: 'IIT Delhi Energy Group',
     status: 'published',
     images: [
-      'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?w=800',
+      '/images/aeroclean.jpg',
       'https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=800',
     ],
     creatorId: 'user-harsh',
@@ -793,7 +793,7 @@ class Store {
               return {
                 ...p,
                 images: [
-                  'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?w=800',
+                  '/images/aeroclean.jpg',
                   'https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=800',
                 ],
               };
