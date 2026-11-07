@@ -107,7 +107,9 @@ html:not(.dark) .bg-slate-900\/40,
 html:not(.dark) .bg-slate-900\/50,
 html:not(.dark) .bg-slate-900\/60,
 html:not(.dark) .bg-slate-900\/70,
-html:not(.dark) .bg-slate-900\/80 {
+html:not(.dark) .bg-slate-900\/80,
+html:not(.dark) .bg-slate-900\/90,
+html:not(.dark) .bg-slate-900\/95 {
   background-color: #ffffff !important;
   border-color: #e2e8f0 !important;
 }
@@ -161,8 +163,7 @@ html:not(.dark) .bg-indigo-500,
 html:not(.dark) .bg-emerald-600,
 html:not(.dark) .bg-purple-600,
 html:not(.dark) .bg-rose-600,
-html:not(.dark) .bg-amber-600,
-html:not(.dark) [class*="bg-gradient-to-"] {
+html:not(.dark) .bg-amber-600 {
   color: #ffffff;
 }
 

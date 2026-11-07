@@ -121,12 +121,12 @@ export default function SettingsPage() {
         </div>
 
         {/* Product Onboarding Tour */}
-        <div className="p-6 rounded-3xl border border-indigo-500/30 bg-gradient-to-r from-indigo-950/30 via-slate-900 to-blue-950/20 space-y-3">
+        <div className="p-6 rounded-3xl border border-indigo-200 dark:border-indigo-500/30 bg-gradient-to-r from-indigo-50 via-blue-50/70 to-indigo-50 dark:from-indigo-950/30 dark:via-slate-900 dark:to-blue-950/20 space-y-3 shadow-sm">
           <div className="flex items-center gap-2">
-            <Compass className="w-5 h-5 text-indigo-400" />
-            <h2 className="text-sm font-bold text-white">Product Onboarding Tour</h2>
+            <Compass className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">Product Onboarding Tour</h2>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-600 dark:text-slate-400">
             Restart the interactive guided walkthrough of GroupFund AI (spotlighting trips & expense splitting, student innovation crowdfunding, and AI copilot).
           </p>
           <button
@@ -142,20 +142,20 @@ export default function SettingsPage() {
         </div>
 
         {/* Demo Data Reset */}
-        <div className="p-6 rounded-3xl border border-rose-500/20 bg-rose-950/10 space-y-3">
-          <h2 className="text-sm font-bold text-white">Hackathon Demo State Reset</h2>
-          <p className="text-xs text-slate-400">
+        <div className="p-6 rounded-3xl border border-rose-200 dark:border-rose-500/20 bg-rose-50/60 dark:bg-rose-950/10 space-y-3 shadow-sm">
+          <h2 className="text-sm font-bold text-slate-900 dark:text-white">Hackathon Demo State Reset</h2>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
             Resets all test groups, Goa trip expenses (Daksh ₹5k, Rahul ₹2k, Jay ₹1.5k, Meet ₹1k, Harsh ₹500), and innovation projects back to original state.
           </p>
           <button
             onClick={handleReset}
-            className="px-4 py-2 rounded-xl bg-rose-600/30 hover:bg-rose-600/40 text-rose-300 text-xs font-semibold border border-rose-500/30 flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2.5 rounded-xl bg-rose-100 hover:bg-rose-200 dark:bg-rose-600/30 dark:hover:bg-rose-600/40 text-rose-800 dark:text-rose-200 text-xs font-semibold border border-rose-300 dark:border-rose-500/30 flex items-center gap-1.5 transition-colors shadow-sm"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5 text-rose-600 dark:text-rose-300" />
             <span>Reset Demo Store to Factory State</span>
           </button>
           {resetSuccess && (
-            <p className="text-xs text-emerald-400 font-semibold">Demo store restored successfully!</p>
+            <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Demo store restored successfully!</p>
           )}
         </div>
       </div>

@@ -197,14 +197,14 @@ export default function CreateProjectPage() {
         </div>
 
         {/* Gemini AI Proposal Generator Card */}
-        <div className="p-6 rounded-3xl border border-violet-500/30 bg-gradient-to-r from-violet-950/30 via-slate-900 to-indigo-950/20 space-y-4">
-          <div className="flex items-center gap-2.5 text-violet-400">
+        <div className="p-6 rounded-3xl border border-violet-200 dark:border-violet-500/30 bg-gradient-to-r from-violet-50 via-purple-50/70 to-indigo-50 dark:from-violet-950/30 dark:via-slate-900 dark:to-indigo-950/20 space-y-4 shadow-sm">
+          <div className="flex items-center gap-2.5 text-violet-600 dark:text-violet-400">
             <Sparkles className="w-5 h-5" />
-            <h2 className="font-bold text-sm text-white">
+            <h2 className="font-bold text-sm text-slate-900 dark:text-white">
               AI Project Proposal Generator (Powered by Gemini 2.5)
             </h2>
           </div>
-          <p className="text-xs text-slate-300">
+          <p className="text-xs text-slate-600 dark:text-slate-300">
             Enter a short project idea (e.g. &ldquo;Autonomous Solar Panel Cleaning Drone&rdquo; or &ldquo;Non-Invasive Glucose Patch&rdquo;) and Gemini will formulate a comprehensive technical problem statement, BOM budget, and milestone roadmap.
           </p>
 

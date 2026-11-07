@@ -103,13 +103,13 @@ export default function ProjectManagePage() {
     <AppLayout>
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-violet-400">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400">
               Creator Dashboard
             </span>
-            <h1 className="text-2xl font-bold text-white mt-0.5">{activeProject.title}</h1>
-            <p className="text-xs text-slate-400">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">{activeProject.title}</h1>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
               Manage development milestones, submit benchmark evidence, and review Gemini AI progress audits
             </p>
           </div>
@@ -117,7 +117,7 @@ export default function ProjectManagePage() {
           <div className="flex items-center gap-2.5">
             <Link
               href={`/projects/${activeProject.id}`}
-              className="px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-200 text-xs font-semibold hover:bg-slate-800 transition-colors"
+              className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
             >
               Public View
             </Link>
@@ -134,8 +134,8 @@ export default function ProjectManagePage() {
         {/* Milestones Management Cards */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-white">Project Milestones</h2>
-            <span className="text-xs text-slate-400">
+            <h2 className="text-base font-bold text-slate-900 dark:text-white">Project Milestones</h2>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
               Click &ldquo;Submit Evidence&rdquo; on an upcoming or in-progress milestone to run AI verification
             </span>
           </div>
@@ -148,24 +148,24 @@ export default function ProjectManagePage() {
               return (
                 <div
                   key={ms.id}
-                  className="p-6 rounded-3xl border border-slate-800 bg-slate-900/60 space-y-4"
+                  className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 space-y-4 shadow-sm"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div
                         className={`w-9 h-9 rounded-2xl flex items-center justify-center text-xs font-bold ${
                           isCompleted
-                            ? 'bg-emerald-500/20 text-emerald-400'
+                            ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
                             : isSubmitted
-                            ? 'bg-blue-500/20 text-blue-400'
-                            : 'bg-slate-800 text-slate-400'
+                            ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                         }`}
                       >
                         #{ms.orderIndex}
                       </div>
                       <div>
-                        <h3 className="font-bold text-sm text-white">{ms.title}</h3>
-                        <p className="text-xs text-slate-400">{ms.description}</p>
+                        <h3 className="font-bold text-sm text-slate-900 dark:text-white">{ms.title}</h3>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">{ms.description}</p>
                       </div>
                     </div>
 
@@ -173,10 +173,10 @@ export default function ProjectManagePage() {
                       <span
                         className={`text-[10px] px-2.5 py-1 rounded-full font-bold uppercase ${
                           isCompleted
-                            ? 'bg-emerald-500/20 text-emerald-300'
+                            ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
                             : isSubmitted
-                            ? 'bg-blue-500/20 text-blue-300'
-                            : 'bg-amber-500/20 text-amber-300'
+                            ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300'
+                            : 'bg-amber-500/15 text-amber-700 dark:text-amber-300'
                         }`}
                       >
                         {ms.status.replace('_', ' ')}
@@ -257,15 +257,15 @@ export default function ProjectManagePage() {
         {/* Evidence Submission Modal */}
         {selectedMilestoneId && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in">
-            <div className="w-full max-w-lg rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl p-6 sm:p-8 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2 text-violet-400">
+            <div className="w-full max-w-lg rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl p-6 sm:p-8 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400">
                   <Sparkles className="w-5 h-5" />
-                  <h3 className="font-bold text-base text-white">Submit Milestone Evidence</h3>
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">Submit Milestone Evidence</h3>
                 </div>
                 <button
                   onClick={() => setSelectedMilestoneId(null)}
-                  className="text-xs text-slate-400 hover:text-white"
+                  className="text-xs text-slate-400 hover:text-slate-700 dark:hover:text-white"
                 >
                   Cancel
                 </button>
@@ -273,7 +273,7 @@ export default function ProjectManagePage() {
 
               <form onSubmit={handleMilestoneSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Deliverable Title *
                   </label>
                   <input
@@ -281,12 +281,12 @@ export default function ProjectManagePage() {
                     required
                     value={subTitle}
                     onChange={(e) => setSubTitle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs shadow-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Progress Notes & Benchmark Results *
                   </label>
                   <textarea
@@ -295,23 +295,23 @@ export default function ProjectManagePage() {
                     placeholder="Document test metrics, latency, frame rates, payload capacity, and hardware BOM..."
                     value={subNotes}
                     onChange={(e) => setSubNotes(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs shadow-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Evidence Image / Video Link
                   </label>
                   <input
                     type="url"
                     value={subEvidenceUrl}
                     onChange={(e) => setSubEvidenceUrl(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-950 text-white text-xs"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs shadow-sm"
                   />
                 </div>
 
-                <div className="p-3 rounded-xl bg-violet-950/20 border border-violet-500/20 text-[11px] text-violet-300">
+                <div className="p-3 rounded-xl bg-violet-50 dark:bg-violet-950/20 border border-violet-200 dark:border-violet-500/20 text-[11px] text-violet-700 dark:text-violet-300">
                   Submitting will automatically invoke Gemini 2.5 to evaluate technical progress against deliverables and generate a verification score.
                 </div>
 
@@ -319,7 +319,7 @@ export default function ProjectManagePage() {
                   <button
                     type="button"
                     onClick={() => setSelectedMilestoneId(null)}
-                    className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white"
+                    className="px-4 py-2 rounded-xl text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white"
                   >
                     Cancel
                   </button>

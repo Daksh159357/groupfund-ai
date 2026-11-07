@@ -303,17 +303,17 @@ export default function SlidesPage() {
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-blue-950/20 via-slate-900 to-indigo-950/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="p-6 rounded-3xl border border-indigo-200 dark:border-indigo-500/20 bg-gradient-to-r from-blue-50 via-indigo-50/70 to-blue-50 dark:from-blue-950/20 dark:via-slate-900 dark:to-indigo-950/20 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
             <div className="space-y-1">
-              <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                <Globe className="w-4 h-4 text-blue-400" />
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Globe className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 Cross-Border Currency Bridge (₹83 = $1 USD)
               </h4>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-600 dark:text-slate-300">
                 Charges international backers in USD ($1.20) via PayPal Sandbox while keeping the student recipient’s platform ledger strictly in integer INR paise.
               </p>
             </div>
-            <span className="px-3.5 py-1.5 rounded-xl bg-indigo-600/30 border border-indigo-500/40 text-indigo-300 text-xs font-mono font-bold shrink-0">
+            <span className="px-3.5 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-600/30 border border-indigo-200 dark:border-indigo-500/40 text-indigo-700 dark:text-indigo-300 text-xs font-mono font-bold shrink-0">
               Zero Rounding Loss
             </span>
           </div>
