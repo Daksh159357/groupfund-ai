@@ -266,8 +266,11 @@ function ProjectDetailContent() {
             <div className="rounded-3xl border border-slate-800 bg-slate-900 overflow-hidden">
               <div className="h-72 sm:h-96 relative bg-slate-800">
                 <img
-                  src={project.images[selectedImage] || project.images[0]}
+                  src={project.images[selectedImage] || project.images[0] || '/images/aeroclean.jpg'}
                   alt={project.title}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/images/aeroclean.jpg';
+                  }}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-xs font-semibold text-white">
@@ -286,7 +289,14 @@ function ProjectDetailContent() {
                         selectedImage === idx ? 'border-violet-500 scale-105' : 'border-slate-800 opacity-60'
                       }`}
                     >
-                      <img src={img} alt="" className="w-full h-full object-cover" />
+                      <img
+                        src={img || '/images/aeroclean.jpg'}
+                        alt=""
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/images/aeroclean.jpg';
+                        }}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>

@@ -316,8 +316,11 @@ export default function DashboardPage() {
                     >
                       <div className="flex items-center gap-3">
                         <img
-                          src={proj.images[0]}
+                          src={proj.images[0] || '/images/aeroclean.jpg'}
                           alt=""
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/images/aeroclean.jpg';
+                          }}
                           className="w-12 h-12 rounded-xl object-cover shrink-0"
                         />
                         <div className="min-w-0 flex-1">

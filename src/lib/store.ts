@@ -624,8 +624,8 @@ export const INITIAL_PROJECTS: InnovationProject[] = [
     institution: 'IIT Delhi Energy Group',
     status: 'published',
     images: [
-      'https://images.unsplash.com/photo-1509391365360-2e959784a276?w=800',
-      'https://images.unsplash.com/photo-1508873696983-2df5293cb32f?w=800',
+      'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?w=800',
+      'https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=800',
     ],
     creatorId: 'user-harsh',
     creatorName: 'Harsh Mehta',
@@ -782,7 +782,29 @@ class Store {
       if (storedSettlements) this.settlements = JSON.parse(storedSettlements);
 
       const storedProjects = localStorage.getItem(STORAGE_KEYS.PROJECTS);
-      if (storedProjects) this.projects = JSON.parse(storedProjects);
+      if (storedProjects) {
+        const parsed: InnovationProject[] = JSON.parse(storedProjects);
+        const updated = parsed.map((p) => {
+          if (p.id === 'proj-aeroclean') {
+            const has404 = p.images?.some(
+              (img) => img.includes('1509391365360') || img.includes('1508873696983')
+            );
+            if (has404 || !p.images || p.images.length === 0) {
+              return {
+                ...p,
+                images: [
+                  'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?w=800',
+                  'https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=800',
+                ],
+              };
+            }
+          }
+          return p;
+        });
+        const existingIds = new Set(updated.map((p) => p.id));
+        const missingInitial = INITIAL_PROJECTS.filter((p) => !existingIds.has(p.id));
+        this.projects = [...updated, ...missingInitial];
+      }
 
       const storedTransactions = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
       if (storedTransactions) this.transactions = JSON.parse(storedTransactions);

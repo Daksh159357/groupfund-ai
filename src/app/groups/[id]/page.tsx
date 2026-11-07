@@ -82,9 +82,13 @@ function GroupDetailContent() {
     );
   }
 
-  // Filter expenses and settlements matching the canonical group.id
-  const groupExpenses = expenses.filter((e) => e.groupId === group.id);
-  const groupSettlements = settlements.filter((s) => s.groupId === group.id);
+  // Filter expenses and settlements matching canonical group.id or inviteCode
+  const groupExpenses = expenses.filter(
+    (e) => e.groupId === group.id || (group.inviteCode && e.groupId === group.inviteCode)
+  );
+  const groupSettlements = settlements.filter(
+    (s) => s.groupId === group.id || (group.inviteCode && s.groupId === group.inviteCode)
+  );
 
   // Compute live balances and optimal debt simplification
   const balances = calculateGroupBalances(group.members, groupExpenses, groupSettlements);
