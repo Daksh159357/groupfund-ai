@@ -97,19 +97,19 @@ function CountUpNumber({ end, duration = 1.2 }: { end: number; duration?: number
 // 4-Directional Flying Scroll Variants for The GroupFund Advantage
 const advantageVariants = {
   topLeft: {
-    initial: { opacity: 0, x: -500, rotate: -15 },
+    initial: { opacity: 0, x: -600, rotate: -15 },
     animate: { opacity: 1, x: 0, rotate: 0 },
   },
   topRight: {
-    initial: { opacity: 0, x: 500, rotate: 15 },
+    initial: { opacity: 0, x: 600, rotate: 15 },
     animate: { opacity: 1, x: 0, rotate: 0 },
   },
   bottomLeft: {
-    initial: { opacity: 0, y: -500, rotate: -10 },
+    initial: { opacity: 0, y: -600, rotate: -10 },
     animate: { opacity: 1, y: 0, rotate: 0 },
   },
   bottomRight: {
-    initial: { opacity: 0, y: 500, rotate: 10 },
+    initial: { opacity: 0, y: 600, rotate: 10 },
     animate: { opacity: 1, y: 0, rotate: 0 },
   },
 };
@@ -129,28 +129,29 @@ export default function LandingPage() {
     mouseY.set(e.clientY - rect.top);
   };
 
-  // Sticky 300vh Container Scroll Tracking
+  // Sticky 220vh Container Scroll Tracking - Zero blank space, smooth pacing
   const stickyRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: stickyProgress } = useScroll({
     target: stickyRef,
     offset: ['start start', 'end end'],
   });
 
-  // Sticky Phase 1 (0.0 to 0.3): Scale from 0.85 to 1.0, rotateX 20deg to 0deg
-  const mockupScale = useTransform(stickyProgress, [0, 0.25], [0.85, 1.0]);
-  const mockupRotateX = useTransform(stickyProgress, [0, 0.25], [20, 0]);
-  const phase1Opacity = useTransform(stickyProgress, [0, 0.05, 0.22, 0.28], [0, 1, 1, 0]);
+  // Sticky Phase 1 (0.0 to 0.3): Scale from 0.88 to 1.0, rotateX 15deg to 0deg (starts visible, zero blank delay)
+  const mockupScale = useTransform(stickyProgress, [0, 0.22], [0.88, 1.0]);
+  const mockupRotateX = useTransform(stickyProgress, [0, 0.22], [15, 0]);
+  const mockupOpacity = useTransform(stickyProgress, [0, 0.65, 0.74], [1, 1, 0]);
+  const phase1Opacity = useTransform(stickyProgress, [0, 0.24, 0.30], [1, 1, 0]);
 
-  // Sticky Phase 2 (0.3 to 0.6): Dashboard slides left, AI chat slides from right
-  const mockupX = useTransform(stickyProgress, [0.3, 0.55], ['0%', '-26%']);
-  const aiChatX = useTransform(stickyProgress, [0.32, 0.48], ['120%', '0%']);
-  const aiChatOpacity = useTransform(stickyProgress, [0.32, 0.38, 0.58, 0.64], [0, 1, 1, 0]);
-  const phase2Opacity = useTransform(stickyProgress, [0.3, 0.35, 0.55, 0.6], [0, 1, 1, 0]);
+  // Sticky Phase 2 (0.3 to 0.65): Dashboard slides left, AI chat slides from right
+  const mockupX = useTransform(stickyProgress, [0.28, 0.46], ['0%', '-24%']);
+  const aiChatX = useTransform(stickyProgress, [0.28, 0.46], ['110%', '0%']);
+  const aiChatOpacity = useTransform(stickyProgress, [0.28, 0.36, 0.62, 0.68], [0, 1, 1, 0]);
+  const phase2Opacity = useTransform(stickyProgress, [0.28, 0.34, 0.62, 0.68], [0, 1, 1, 0]);
 
-  // Sticky Phase 3 (0.6 to 1.0): Massive Logo glow in center
-  const logoScale = useTransform(stickyProgress, [0.65, 0.95], [0.75, 1.25]);
-  const logoOpacity = useTransform(stickyProgress, [0.65, 0.78, 1.0], [0, 1, 1]);
-  const phase3Opacity = useTransform(stickyProgress, [0.65, 0.75, 1.0], [0, 1, 1]);
+  // Sticky Phase 3 (0.68 to 1.0): Seamless Logo glow reveal in center
+  const logoScale = useTransform(stickyProgress, [0.68, 0.88], [0.8, 1.05]);
+  const logoOpacity = useTransform(stickyProgress, [0.68, 0.76, 1.0], [0, 1, 1]);
+  const phase3Opacity = useTransform(stickyProgress, [0.68, 0.76, 1.0], [0, 1, 1]);
 
   // Scroll-Triggered Expense Splitting Section Tracking
   const splitRef = useRef<HTMLDivElement>(null);
@@ -368,8 +369,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2. Apple-Style Sticky Scroll Container (300vh): "The Intelligence Behind Your Money" */}
-      <section ref={stickyRef} className="relative h-[300vh] bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-t border-slate-200 dark:border-slate-800/80">
+      {/* 2. Apple-Style Sticky Scroll Container (220vh): "The Intelligence Behind Your Money" */}
+      <section ref={stickyRef} className="relative h-[220vh] bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-t border-slate-200 dark:border-slate-800/80">
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden px-4">
           {/* Subtle Ambient Radial Glow */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-indigo-500/5 to-transparent dark:from-blue-600/15 dark:via-indigo-600/10 dark:to-transparent pointer-events-none" />
@@ -433,6 +434,7 @@ export default function LandingPage() {
                 scale: mockupScale,
                 rotateX: mockupRotateX,
                 x: mockupX,
+                opacity: mockupOpacity,
                 perspective: '1200px',
               }}
               className="w-full max-w-3xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-5 sm:p-7 shadow-2xl shadow-blue-500/10 backdrop-blur-xl z-10"
@@ -807,7 +809,7 @@ export default function LandingPage() {
               initial="initial"
               whileInView="animate"
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
               whileHover={{ y: -6, scale: 1.02 }}
               className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-emerald-400 dark:hover:border-emerald-500/50 transition-colors flex flex-col justify-between"
             >
@@ -840,7 +842,7 @@ export default function LandingPage() {
               initial="initial"
               whileInView="animate"
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
               whileHover={{ y: -6, scale: 1.02 }}
               className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-indigo-400 dark:hover:border-indigo-500/50 transition-colors flex flex-col justify-between"
             >
@@ -873,7 +875,7 @@ export default function LandingPage() {
               initial="initial"
               whileInView="animate"
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
               whileHover={{ y: -6, scale: 1.02 }}
               className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors flex flex-col justify-between"
             >
@@ -906,7 +908,7 @@ export default function LandingPage() {
               initial="initial"
               whileInView="animate"
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ type: 'spring', stiffness: 60, damping: 12, mass: 1 }}
+              transition={{ type: 'spring', stiffness: 70, damping: 13, mass: 0.9 }}
               whileHover={{ y: -6, scale: 1.02 }}
               className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors flex flex-col justify-between"
             >
