@@ -43,13 +43,24 @@ function ProjectDetailContent() {
   const captureAttemptedRef = useRef(false);
 
   useEffect(() => {
-    if (isCancelledParam) {
+    // 1. Detect cancellation:
+    // Check if cancelled=true OR if token exists but PayerID is missing from the URL (PayPal only sends PayerID on success)
+    const isCancelled = isCancelledParam || (Boolean(token) && !payerId && !captureAttemptedRef.current);
+
+    if (isCancelled) {
       setPaymentNotice({
         type: 'cancelled',
-        message: 'PayPal checkout was cancelled. No funds were debited.',
+        message: 'PayPal checkout was cancelled. No funds were deducted.',
       });
       if (typeof window !== 'undefined') {
-        window.history.replaceState({}, '', window.location.pathname);
+        if (token) {
+          try {
+            localStorage.removeItem(`pending_paypal_${token}`);
+          } catch (e) {
+            console.warn('Failed to clean up pending paypal token', e);
+          }
+        }
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
       return;
     }
@@ -84,6 +95,10 @@ function ProjectDetailContent() {
         }),
       })
         .then(async (res) => {
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || `Payment capture failed with status ${res.status}`);
+          }
           const data = await res.json();
           if (!data.success) {
             throw new Error(data.error || 'Payment capture failed');
@@ -114,7 +129,7 @@ function ProjectDetailContent() {
 
           if (typeof window !== 'undefined') {
             localStorage.removeItem(`pending_paypal_${token}`);
-            window.history.replaceState({}, '', window.location.pathname);
+            window.history.replaceState({}, document.title, window.location.pathname);
           }
         })
         .catch((err: any) => {
@@ -142,7 +157,7 @@ function ProjectDetailContent() {
             message: friendlyMsg,
           });
           if (typeof window !== 'undefined') {
-            window.history.replaceState({}, '', window.location.pathname);
+            window.history.replaceState({}, document.title, window.location.pathname);
           }
         })
         .finally(() => {
@@ -205,24 +220,24 @@ function ProjectDetailContent() {
 
         {/* PayPal Sandbox Return Banners */}
         {isCapturingOrder && (
-          <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center gap-3 text-xs text-blue-300 animate-pulse">
-            <Loader2 className="w-5 h-5 animate-spin text-blue-400 shrink-0" />
+          <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 flex items-center gap-3 text-xs text-blue-900 dark:text-blue-300 animate-pulse">
+            <Loader2 className="w-5 h-5 animate-spin text-blue-600 dark:text-blue-400 shrink-0" />
             <div>
               <p className="font-bold">Verifying and Capturing PayPal Sandbox Payment...</p>
-              <p className="text-slate-400">Order ID: {token} &bull; Please wait while your transaction is confirmed.</p>
+              <p className="text-slate-600 dark:text-slate-400">Order ID: {token} &bull; Please wait while your transaction is confirmed.</p>
             </div>
           </div>
         )}
 
         {paymentNotice.type === 'success' && (
-          <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between text-xs text-emerald-300">
+          <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 flex items-center justify-between text-xs text-emerald-900 dark:text-emerald-300">
             <div className="flex items-center gap-2.5">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span className="font-semibold">{paymentNotice.message}</span>
             </div>
             <button
               onClick={() => setPaymentNotice({ type: null, message: '' })}
-              className="text-slate-400 hover:text-white text-base px-2 py-0.5"
+              className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base px-2 py-0.5"
             >
               &times;
             </button>
@@ -230,14 +245,14 @@ function ProjectDetailContent() {
         )}
 
         {paymentNotice.type === 'cancelled' && (
-          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-xs text-amber-300">
+          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-center justify-between text-xs text-amber-900 dark:text-amber-300">
             <div className="flex items-center gap-2.5">
-              <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
-              <span>{paymentNotice.message}</span>
+              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span className="font-semibold">{paymentNotice.message}</span>
             </div>
             <button
               onClick={() => setPaymentNotice({ type: null, message: '' })}
-              className="text-slate-400 hover:text-white text-base px-2 py-0.5"
+              className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base px-2 py-0.5"
             >
               &times;
             </button>
@@ -245,14 +260,14 @@ function ProjectDetailContent() {
         )}
 
         {paymentNotice.type === 'error' && (
-          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between text-xs text-rose-300">
+          <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30 flex items-center justify-between text-xs text-rose-900 dark:text-rose-300">
             <div className="flex items-center gap-2.5">
-              <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />
-              <span>{paymentNotice.message}</span>
+              <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0" />
+              <span className="font-semibold">{paymentNotice.message}</span>
             </div>
             <button
               onClick={() => setPaymentNotice({ type: null, message: '' })}
-              className="text-slate-400 hover:text-white text-base px-2 py-0.5"
+              className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base px-2 py-0.5"
             >
               &times;
             </button>

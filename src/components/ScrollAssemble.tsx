@@ -30,13 +30,13 @@ export function ScrollAssemble({
   rotate = 0,
   scaleFrom = 0.92,
   blurFrom = 6,
-  offset = ['start 95%', 'start 55%'],
+  offset = ['start 98%', 'start 68%'],
   delay = 0,
   className = '',
   style = {},
   children,
 }: ScrollAssembleProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
   // Screen size check for mobile responsive scaling
@@ -56,9 +56,9 @@ export function ScrollAssemble({
   const effectiveRotate = isMobile ? 0 : rotate;
   const effectiveBlur = isMobile ? 0 : blurFrom;
 
-  // Track scroll progress of the target element
+  // Track scroll progress of the un-transformed outer container wrapper
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: containerRef,
     offset,
   });
 
@@ -82,12 +82,12 @@ export function ScrollAssemble({
   const y = useTransform(smoothProgress, [rangeStart, rangeEnd], [startY, 0], { clamp: true });
   const rotateVal = useTransform(smoothProgress, [rangeStart, rangeEnd], [effectiveRotate, 0], { clamp: true });
   const scale = useTransform(smoothProgress, [rangeStart, rangeEnd], [scaleFrom, 1], { clamp: true });
-  // Opacity finishes early (around 65% of scroll) so the content is fully crisp and readable
-  const opacity = useTransform(smoothProgress, [rangeStart, rangeStart + (rangeEnd - rangeStart) * 0.65], [0, 1], { clamp: true });
+  // Opacity finishes early (around 50% of range) so the content is immediately crisp and readable
+  const opacity = useTransform(smoothProgress, [rangeStart, rangeStart + (rangeEnd - rangeStart) * 0.5], [0, 1], { clamp: true });
   // Filter blur resolves to 0px
   const blurVal = useTransform(
     smoothProgress,
-    [rangeStart, rangeStart + (rangeEnd - rangeStart) * 0.8],
+    [rangeStart, rangeStart + (rangeEnd - rangeStart) * 0.7],
     [`blur(${effectiveBlur}px)`, 'blur(0px)'],
     { clamp: true }
   );
@@ -102,21 +102,21 @@ export function ScrollAssemble({
   }
 
   return (
-    <motion.div
-      ref={ref}
-      className={className}
-      style={{
-        x,
-        y,
-        rotate: rotateVal,
-        scale,
-        opacity,
-        filter: effectiveBlur > 0 ? blurVal : undefined,
-        ...style,
-      }}
-    >
-      {children}
-    </motion.div>
+    <div ref={containerRef} className={className} style={{ ...style, height: '100%' }}>
+      <motion.div
+        className="h-full w-full"
+        style={{
+          x,
+          y,
+          rotate: rotateVal,
+          scale,
+          opacity,
+          filter: effectiveBlur > 0 ? blurVal : undefined,
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 }
 

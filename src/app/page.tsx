@@ -720,7 +720,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Card 1 (Top Left): Flies in from far left with -6deg tilt */}
-            <ScrollAssemble from="left" distance={240} rotate={-6} offset={['start 90%', 'start 55%']}>
+            <ScrollAssemble from="left" distance={240} rotate={-6} offset={['start 98%', 'start 68%']}>
               <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-emerald-400 dark:hover:border-emerald-500/50 transition-colors flex flex-col justify-between h-full">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -747,7 +747,7 @@ export default function LandingPage() {
             </ScrollAssemble>
 
             {/* Card 2 (Top Right): Flies in from far right with +6deg tilt */}
-            <ScrollAssemble from="right" distance={240} rotate={6} offset={['start 88%', 'start 52%']}>
+            <ScrollAssemble from="right" distance={240} rotate={6} offset={['start 98%', 'start 68%']}>
               <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-indigo-400 dark:hover:border-indigo-500/50 transition-colors flex flex-col justify-between h-full">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -774,7 +774,7 @@ export default function LandingPage() {
             </ScrollAssemble>
 
             {/* Card 3 (Bottom Left): Drops down from left with -6deg tilt */}
-            <ScrollAssemble from="left" distance={240} rotate={-6} offset={['start 85%', 'start 50%']}>
+            <ScrollAssemble from="left" distance={240} rotate={-6} offset={['start 95%', 'start 65%']}>
               <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-blue-400 dark:hover:border-blue-500/50 transition-colors flex flex-col justify-between h-full">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -801,7 +801,7 @@ export default function LandingPage() {
             </ScrollAssemble>
 
             {/* Card 4 (Bottom Right): Flies in from right with +6deg tilt */}
-            <ScrollAssemble from="right" distance={240} rotate={6} offset={['start 82%', 'start 46%']}>
+            <ScrollAssemble from="right" distance={240} rotate={6} offset={['start 95%', 'start 65%']}>
               <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/80 backdrop-blur-xl p-7 sm:p-8 space-y-5 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors flex flex-col justify-between h-full">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
