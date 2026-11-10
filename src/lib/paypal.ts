@@ -7,6 +7,7 @@ export function getPayPalConfig() {
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '';
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET || '';
   const environment = (process.env.PAYPAL_ENVIRONMENT || 'sandbox').toLowerCase();
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const isConfigured = Boolean(
     clientId &&
     clientId !== 'sb' &&
@@ -19,7 +20,7 @@ export function getPayPalConfig() {
       ? 'https://api-m.paypal.com'
       : 'https://api-m.sandbox.paypal.com';
 
-  return { clientId, clientSecret, environment, isConfigured, baseUrl };
+  return { clientId, clientSecret, environment, isConfigured, baseUrl, appUrl };
 }
 
 export const isPayPalConfigured = Boolean(
@@ -76,7 +77,7 @@ export async function createPayPalOrder(params: {
   cancelUrl?: string;
 }) {
   const { amountValue, amountPaise, currencyCode = 'USD', customId, description, returnUrl, cancelUrl } = params;
-  const { isConfigured, baseUrl } = getPayPalConfig();
+  const { isConfigured, baseUrl, appUrl } = getPayPalConfig();
 
   if (!isConfigured) {
     throw new Error('PayPal Sandbox is not configured. Configure NEXT_PUBLIC_PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET in .env.local to enable real order creation.');
@@ -87,9 +88,8 @@ export async function createPayPalOrder(params: {
     ? (amountPaise / 100 / INR_PER_USD).toFixed(2)
     : amountValue || '1.00';
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const targetReturnUrl = returnUrl || `${appUrl}/projects/${customId || ''}`;
-  const targetCancelUrl = cancelUrl || `${appUrl}/projects/${customId || ''}?cancelled=true`;
+  const targetCancelUrl = cancelUrl || `${appUrl}/dashboard?cancelled=true`;
 
   const accessToken = await getPayPalAccessToken();
 

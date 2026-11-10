@@ -220,6 +220,10 @@ export function PayPalContributionButton({
         )}
       </button>
 
+      <p className="text-[10px] text-center text-amber-600 dark:text-amber-400 font-medium bg-amber-500/10 py-1.5 px-2.5 rounded-lg border border-amber-500/20">
+        Note: You must log in with a US Personal Sandbox account, not the Merchant Business account.
+      </p>
+
       <p className="text-[10px] text-center text-slate-400">
         Charged in USD via PayPal Sandbox at a fixed demo rate (₹83 = $1). Your GroupFund ledger remains in INR.
       </p>

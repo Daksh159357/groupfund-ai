@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, useCallback } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useApp } from '@/context/AppContext';
 import { formatPaise } from '@/lib/financial';
@@ -16,10 +17,36 @@ import {
   Scale,
   CheckCircle2,
   AlertTriangle,
+  AlertCircle,
   Clock,
   ArrowUpRight,
   Upload,
 } from 'lucide-react';
+
+function PayPalCancelHandler({ onCancelled }: { onCancelled: () => void }) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const isCancelled =
+      searchParams?.get('cancelled') === 'true' ||
+      (Boolean(searchParams?.get('token')) && !searchParams?.get('PayerID'));
+
+    if (isCancelled) {
+      onCancelled();
+      if (typeof window !== 'undefined') {
+        const token = searchParams?.get('token');
+        if (token) {
+          try {
+            localStorage.removeItem(`pending_paypal_${token}`);
+          } catch (_) {}
+        }
+        window.history.replaceState({}, document.title, '/dashboard');
+      }
+    }
+  }, [searchParams, onCancelled]);
+
+  return null;
+}
 import { CreateExpenseModal } from '@/components/expenses/CreateExpenseModal';
 import { CreateGroupModal } from '@/components/groups/CreateGroupModal';
 import {
@@ -39,6 +66,11 @@ export default function DashboardPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [showAddExpense, setShowAddExpense] = useState(false);
   const [showCreateGroup, setShowCreateGroup] = useState(false);
+  const [cancelToast, setCancelToast] = useState(false);
+
+  const handleCancelled = useCallback(() => {
+    setCancelToast(true);
+  }, []);
 
   useEffect(() => {
     setIsMounted(true);
@@ -108,7 +140,27 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
+      <Suspense fallback={null}>
+        <PayPalCancelHandler onCancelled={handleCancelled} />
+      </Suspense>
+
       <div className="space-y-8">
+        {/* PayPal Cancellation Toast / Notice */}
+        {cancelToast && (
+          <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-center justify-between text-xs text-amber-900 dark:text-amber-300 shadow-sm transition-all">
+            <div className="flex items-center gap-2.5">
+              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span className="font-semibold">PayPal checkout was cancelled. No funds were deducted.</span>
+            </div>
+            <button
+              onClick={() => setCancelToast(false)}
+              className="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base px-2 py-0.5"
+            >
+              &times;
+            </button>
+          </div>
+        )}
+
         {/* Top Welcome Banner */}
         <div className="relative rounded-3xl border border-blue-200/80 dark:border-slate-800 bg-gradient-to-r from-blue-50 via-indigo-50/50 to-slate-50 dark:from-blue-950/40 dark:via-slate-900 dark:to-indigo-950/30 p-6 sm:p-8 overflow-hidden shadow-sm">
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
