@@ -95,13 +95,14 @@ function ProjectDetailContent() {
         }),
       })
         .then(async (res) => {
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            throw new Error(data.error || `Payment capture failed with status ${res.status}`);
+          const data = await res.json().catch(() => ({}));
+          if (res.status === 409 || data.isDuplicate || data.code === 'ORDER_ALREADY_CAPTURED') {
+            const duplicateErr: any = new Error(data.error || 'ORDER_ALREADY_CAPTURED');
+            duplicateErr.isDuplicate = true;
+            throw duplicateErr;
           }
-          const data = await res.json();
-          if (!data.success) {
-            throw new Error(data.error || 'Payment capture failed');
+          if (!res.ok || !data.success) {
+            throw new Error(data.error || `Payment capture failed with status ${res.status}`);
           }
           return data;
         })
@@ -136,6 +137,7 @@ function ProjectDetailContent() {
           console.error('PayPal capture error:', err);
           const rawErr = String(err?.message || '');
           const isDuplicate =
+            Boolean(err?.isDuplicate) ||
             rawErr.includes('Duplicate payment capture') ||
             rawErr.includes('already been captured') ||
             rawErr.includes('ORDER_ALREADY_CAPTURED');
@@ -157,6 +159,9 @@ function ProjectDetailContent() {
             message: friendlyMsg,
           });
           if (typeof window !== 'undefined') {
+            if (isDuplicate) {
+              localStorage.removeItem(`pending_paypal_${token}`);
+            }
             window.history.replaceState({}, document.title, window.location.pathname);
           }
         })

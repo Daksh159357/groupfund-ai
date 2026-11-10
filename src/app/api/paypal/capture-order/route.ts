@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
           success: false,
           error: `Duplicate payment capture rejected: Order ${orderId} has already been captured and processed.`,
           isDuplicate: true,
+          code: 'ORDER_ALREADY_CAPTURED',
         },
         { status: 409 }
       );
@@ -79,9 +80,27 @@ export async function POST(req: NextRequest) {
       amountPaise: finalAmountPaise,
     });
   } catch (error: any) {
+    const rawErr = String(error?.message || '');
+    const isAlreadyCaptured =
+      Boolean(error?.isAlreadyCaptured) ||
+      rawErr.includes('ORDER_ALREADY_CAPTURED') ||
+      rawErr.includes('Order has already been captured');
+
+    if (isAlreadyCaptured) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Order has already been captured.',
+          isDuplicate: true,
+          code: 'ORDER_ALREADY_CAPTURED',
+        },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { success: false, error: error.message || 'Payment capture failed' },
-      { status: 500 }
+      { status: error.status || 500 }
     );
   }
 }
