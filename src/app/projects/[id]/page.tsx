@@ -43,19 +43,28 @@ function ProjectDetailContent() {
   const captureAttemptedRef = useRef(false);
 
   useEffect(() => {
-    // 1. Detect cancellation:
-    // Check if cancelled=true OR if token exists but PayerID is missing from the URL (PayPal only sends PayerID on success)
-    const isCancelled = isCancelledParam || (Boolean(token) && !payerId && !captureAttemptedRef.current);
+    // Read from window.location.search directly to ensure synchronous, immediate parameter access on mount
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const effectiveToken = token || urlParams?.get('token') || '';
+    const effectivePayerId =
+      payerId ||
+      urlParams?.get('PayerID') ||
+      urlParams?.get('payerId') ||
+      urlParams?.get('payer_id') ||
+      urlParams?.get('PayerId') ||
+      '';
+    const isExplicitlyCancelled = isCancelledParam || urlParams?.get('cancelled') === 'true';
 
-    if (isCancelled) {
+    // 1. Detect explicit cancellation:
+    if (isExplicitlyCancelled) {
       setPaymentNotice({
         type: 'cancelled',
         message: 'PayPal checkout was cancelled. No funds were deducted.',
       });
       if (typeof window !== 'undefined') {
-        if (token) {
+        if (effectiveToken) {
           try {
-            localStorage.removeItem(`pending_paypal_${token}`);
+            localStorage.removeItem(`pending_paypal_${effectiveToken}`);
           } catch (e) {
             console.warn('Failed to clean up pending paypal token', e);
           }
@@ -65,14 +74,15 @@ function ProjectDetailContent() {
       return;
     }
 
-    if (token && payerId && !captureAttemptedRef.current) {
+    // 2. Handle approved PayPal return:
+    if (effectiveToken && effectivePayerId && !captureAttemptedRef.current) {
       captureAttemptedRef.current = true;
       setIsCapturingOrder(true);
 
       let pendingData: any = null;
       if (typeof window !== 'undefined') {
         try {
-          const raw = localStorage.getItem(`pending_paypal_${token}`);
+          const raw = localStorage.getItem(`pending_paypal_${effectiveToken}`);
           if (raw) pendingData = JSON.parse(raw);
         } catch (e) {
           console.warn('Failed to parse pending paypal data', e);
@@ -87,7 +97,7 @@ function ProjectDetailContent() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          orderId: token,
+          orderId: effectiveToken,
           projectId: id,
           amountPaise,
           contributorName,
@@ -96,15 +106,13 @@ function ProjectDetailContent() {
       })
         .then(async (res) => {
           const data = await res.json().catch(() => ({}));
-          if (res.status === 409 || data.isDuplicate || data.code === 'ORDER_ALREADY_CAPTURED') {
-            const duplicateErr: any = new Error(data.error || 'ORDER_ALREADY_CAPTURED');
-            duplicateErr.isDuplicate = true;
-            throw duplicateErr;
-          }
-          if (!res.ok || !data.success) {
+          const isAlreadyCaptured =
+            res.status === 409 || Boolean(data.isDuplicate) || data.code === 'ORDER_ALREADY_CAPTURED';
+
+          if (!res.ok && !isAlreadyCaptured) {
             throw new Error(data.error || `Payment capture failed with status ${res.status}`);
           }
-          return data;
+          return { ...data, wasAlreadyCaptured: isAlreadyCaptured };
         })
         .then((data) => {
           const finalAmountPaise = data.amountPaise || amountPaise;
@@ -112,8 +120,8 @@ function ProjectDetailContent() {
             id,
             finalAmountPaise,
             contributorName,
-            token,
-            data.captureId,
+            effectiveToken,
+            data.captureId || `CAP-${effectiveToken.slice(-6)}`,
             message
           );
 
@@ -129,39 +137,28 @@ function ProjectDetailContent() {
           });
 
           if (typeof window !== 'undefined') {
-            localStorage.removeItem(`pending_paypal_${token}`);
+            localStorage.removeItem(`pending_paypal_${effectiveToken}`);
             window.history.replaceState({}, document.title, window.location.pathname);
           }
         })
         .catch((err: any) => {
           console.error('PayPal capture error:', err);
           const rawErr = String(err?.message || '');
-          const isDuplicate =
-            Boolean(err?.isDuplicate) ||
-            rawErr.includes('Duplicate payment capture') ||
-            rawErr.includes('already been captured') ||
-            rawErr.includes('ORDER_ALREADY_CAPTURED');
-
           const isIndiaOrApprovalIssue =
             rawErr.includes('ORDER_NOT_APPROVED') ||
             rawErr.includes('CURRENCY_NOT_SUPPORTED') ||
             rawErr.includes('currency') ||
             rawErr.includes('422');
 
-          const friendlyMsg = isDuplicate
-            ? 'This contribution has already been verified and credited to the project ledger.'
-            : isIndiaOrApprovalIssue
+          const friendlyMsg = isIndiaOrApprovalIssue
             ? 'PayPal rejected this payment. If you are logged in with an India sandbox account, please use a US sandbox buyer — PayPal India does not support domestic transactions.'
             : rawErr || 'Failed to capture PayPal payment.';
 
           setPaymentNotice({
-            type: isDuplicate ? 'success' : 'error',
+            type: 'error',
             message: friendlyMsg,
           });
           if (typeof window !== 'undefined') {
-            if (isDuplicate) {
-              localStorage.removeItem(`pending_paypal_${token}`);
-            }
             window.history.replaceState({}, document.title, window.location.pathname);
           }
         })
