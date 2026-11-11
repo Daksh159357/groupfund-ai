@@ -79,7 +79,21 @@ We used **Google Gemini 2.5 Flash** for multimodal receipt OCR (extracting itemi
 
 ---
 
+### Testing instructions for judges
+To test the live PayPal crowdfunding flow without any setup:
+1. Open any project prototype on the live site (e.g., [AgriBot](https://groupfund-ai.onrender.com/projects/proj-agribot)).
+2. Select an INR amount and click **PayPal Sandbox Checkout**.
+3. Log in with the preloaded Sandbox Buyer credentials:
+   - **Buyer Email:** `sb-y0f8653836626@personal.example.com`
+   - **Buyer Password:** `DC%9ohe/`
+4. Complete payment to see server-side capture, live confetti, and ledger updates.
+
+> **Warning:** You MUST use this Personal account to log in at checkout. Do NOT use a Business account or an India-based account, as PayPal will block the transaction.
+
+---
+
 ### Live Demo & Repository Links
 * **Live Demo URL:** [https://groupfund-ai.onrender.com/](https://groupfund-ai.onrender.com/)
+* **Testing Guide:** [TESTING_GUIDE.md](TESTING_GUIDE.md)
 * **GitHub Repository:** [https://github.com/Daksh159357/groupfund-ai](https://github.com/Daksh159357/groupfund-ai)
 * **In-App Slide Deck:** [https://groupfund-ai.onrender.com/slides](https://groupfund-ai.onrender.com/slides)

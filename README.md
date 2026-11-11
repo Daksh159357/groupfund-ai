@@ -126,11 +126,19 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-## 💳 PayPal Sandbox Setup (Important)
+## 💳 Testing Instructions & PayPal Sandbox Credentials
 
-> [!IMPORTANT]
-> **US Sandbox Buyer Requirement:**  
-> PayPal India does **not** support domestic INR-to-INR transactions. When completing checkout on an innovation project, **always log in with a US Sandbox Buyer account** (`Country: United States`) with available USD balance (e.g. `sb-49o1l53655900@business.example.com`). An Indian buyer account will fail with *"This seller doesn't accept payments in your currency"*.
+For judges and evaluators testing the live prototype crowdfunding payments, use the following pre-configured US Personal Sandbox Buyer credentials:
+
+- **Buyer Email:** `sb-y0f8653836626@personal.example.com`
+- **Buyer Password:** `DC%9ohe/`
+- **Account Type:** Personal (United States)
+- **Preloaded Balance:** $5,000.00 USD
+
+> [!WARNING]
+> **You MUST use this Personal account to log in at checkout. Do NOT use a Business account or an India-based account, as PayPal will block the transaction.**
+
+For complete end-to-end evaluation steps (including checkout cancellation and Gemini multimodal receipt parsing), refer to [`TESTING_GUIDE.md`](TESTING_GUIDE.md).
 
 ---
 
